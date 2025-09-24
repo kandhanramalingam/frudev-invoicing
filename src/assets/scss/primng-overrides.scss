@@ -1,0 +1,33 @@
+.p-tieredmenu {
+  border: 0 solid white !important;
+  background: none !important;
+}
+.p-tieredmenu-item-link {
+  border-radius: 5px !important;
+  color: white !important;
+  font-size: 0.9rem !important;
+  &:hover {
+    background: #333850 !important;
+    border-width: 0 !important;
+    outline: none !important;
+  }
+}
+.p-tieredmenu-item-icon {
+  color: white !important;
+}
+.p-tieredmenu-root-list {
+  padding: 0 !important;
+  gap: 10px !important;
+}
+.p-tieredmenu-item-link-active {
+  background: #008080 !important;
+}
+
+p-table {
+  thead {
+    th {
+      background: #f7f7fe !important;
+      border-top-width: 1px !important;
+    }
+  }
+}

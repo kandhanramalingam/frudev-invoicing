@@ -1,0 +1,9 @@
+/* Global styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font Awesome Free icons */
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+@import "assets/scss/primng-overrides";

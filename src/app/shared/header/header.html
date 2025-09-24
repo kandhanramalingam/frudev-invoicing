@@ -1,0 +1,11 @@
+<div class="app-header flex items-center justify-between gap-4 p-3">
+  <div class="flex items-center gap-2 min-w-0">
+    <!-- Left slot: if consumer provides custom left content, render it; otherwise render title if provided -->
+    <ng-content select="[left]"></ng-content>
+    <h2 *ngIf="title" class="text-xl font-semibold truncate">{{ title }}</h2>
+  </div>
+  <div class="flex items-center gap-2 ml-4">
+    <!-- Right actions slot -->
+    <ng-content select="[actions]"></ng-content>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<app-header title="Customers">
+  <div actions>
+    <button size="small" pButton type="button" label="Add Customer" icon="fa fa-plus"></button>
+  </div>
+</app-header>
+
+<div class="mt-4">
+  <p-table [value]="customers" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="[5,10,20]" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Company Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th class="text-right">Balance</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-c>
+      <tr>
+        <td>{{ c.name }}</td>
+        <td>{{ c.companyName }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.phone }}</td>
+        <td class="text-right" [ngClass]="{ 'text-red-600': c.balance < 0, 'text-green-600': c.balance > 0 }">{{ c.balance | currency }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
