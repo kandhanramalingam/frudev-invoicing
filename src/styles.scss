@@ -7,3 +7,8 @@
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
 @import "assets/scss/primng-overrides";
+
+.required::after {
+    content: "*";
+    color: red;
+}

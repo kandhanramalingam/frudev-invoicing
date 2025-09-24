@@ -1,1 +1,240 @@
-<p>crud-customer works!</p>
+<div class="bg-white min-h-screen">
+    <!-- Header -->
+    <div class="px-4 py-3">
+        <div class="flex items-center justify-between">
+            <h1 class="text-xl font-semibold text-gray-900">New Customer</h1>
+        </div>
+        <div class="mt-1 flex items-center text-xs text-blue-700 bg-blue-50 px-1 py-2">
+            <i class="pi pi-info-circle mr-1"></i>
+            <span>Prefill Customer details from the GST portal using the Customer's GSTIN.</span>
+            <a href="#" class="ml-1 font-medium hover:underline">Prefill ›</a>
+        </div>
+    </div>
+
+    <form [formGroup]="customerForm" class="px-6 py-6">
+        <!-- Basic Customer Information -->
+        <div class="space-y-6 mb-8">
+            <!-- Customer Type -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-3 items-center">
+                    <label class="text-sm font-medium text-gray-700">
+                        Customer Type
+                        <i class="pi pi-info-circle text-gray-400 ml-1 text-xs"></i>
+                    </label>
+                    <div class="flex space-x-4 col-span-2 items-center">
+                        <p-radioButton name="customerType" value="business" formControlName="customerType"
+                            inputId="business">
+                        </p-radioButton>
+                        <label for="business" class="text-sm text-gray-700 cursor-pointer">Business</label>
+
+                        <p-radioButton name="customerType" value="individual" formControlName="customerType"
+                            inputId="individual">
+                        </p-radioButton>
+                        <label for="individual" class="text-sm text-gray-700 cursor-pointer">Individual</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Primary Contact -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-3 items-center justify-start">
+                    <label class="text-sm font-medium text-gray-700">
+                        Primary Contact
+                    </label>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 col-span-2">
+                        <div class="col-span-1">
+                            <p-select [options]="salutations" formControlName="salutation" placeholder="Salutation"
+                                styleClass="w-full"></p-select>
+                        </div>
+
+                        <div class="col-span-1">
+                            <div>
+                                <input type="text" pInputText placeholder="First Name" formControlName="firstName"
+                                    class="w-full" [class.ng-invalid]="hasError('firstName')"
+                                    [class.ng-dirty]="hasError('firstName')">
+                            </div>
+                            <small class="text-red-500" *ngIf="hasError('firstName')">
+                                {{ getErrorMessage('firstName') }}
+                            </small>
+                        </div>
+
+                        <div class="col-span-1">
+                            <div>
+                                <input type="text" pInputText placeholder="Last Name" formControlName="lastName"
+                                    class="w-full" [class.ng-invalid]="hasError('lastName')"
+                                    [class.ng-dirty]="hasError('lastName')">
+                            </div>
+                            <small class="text-red-500" *ngIf="hasError('lastName')">
+                                {{ getErrorMessage('lastName') }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Company Name -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-3 items-center  justify-start">
+                    <label class="text-sm font-medium text-gray-700">Company Name</label>
+                    <div class="col-span-2">
+                        <input type="text" placeholder="Company Name" pInputText formControlName="companyName"
+                            class="w-full">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display Name -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-3 items-center  justify-start">
+                    <label class="text-sm font-medium text-gray-700 required">
+                        Display Name
+                        <i class="pi pi-info-circle text-gray-400 ml-1 text-xs"></i>
+                    </label>
+                    <div class="col-span-2">
+                        <p-select [options]="displayNameOptions" formControlName="displayName"
+                            placeholder="Select Display Name" styleClass="w-full"
+                            [class.ng-invalid]="hasError('displayName')" [class.ng-dirty]="hasError('displayName')">
+                        </p-select>
+                        <small class="text-red-500" *ngIf="hasError('displayName')">
+                            {{ getErrorMessage('displayName') }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-3 items-center  justify-start">
+                    <label class="text-sm font-medium text-gray-700">
+                        Email Address
+                        <i class="pi pi-info-circle text-gray-400 ml-1 text-xs"></i>
+                    </label>
+                    <div class="col-span-2 relative">
+                        <i class="pi pi-envelope absolute left-3 top-3 text-gray-400"></i>
+                        <input type="email" pInputText formControlName="email" class="w-full pl-10"
+                            placeholder="Enter email" [class.ng-invalid]="hasError('email')"
+                            [class.ng-dirty]="hasError('email')">
+                        <small class="text-red-500" *ngIf="hasError('email')">
+                            {{ getErrorMessage('email') }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone Numbers -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-3 items-center ">
+                    <label class="text-sm font-medium text-gray-700">
+                        Phone
+                        <i class="pi pi-info-circle text-gray-400 ml-1 text-xs"></i>
+                    </label>
+                    <div class="grid grid-cols-1 gap-4 col-span-2 md:grid-cols-2">
+                        <div class="col-span-1">
+                            <div class="relative">
+                                <i class="pi pi-phone absolute left-3 top-3 text-gray-400"></i>
+                                <p-input-number placeholder="Work Phone" formControlName="workPhone"
+                                    class="w-full"></p-input-number>
+                            </div>
+                        </div>
+                        <div class="col-span-1">
+                            <div class="relative">
+                                <i class="pi pi-mobile absolute left-3 top-3 text-gray-400"></i>
+                                <p-input-number placeholder="Mobile" formControlName="mobilePhone" class="w-full">
+                                </p-input-number>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p-tabs value="0">
+            <p-tablist>
+                <p-tab value="0">Address</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <!-- Address Tab Content -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Billing Address -->
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Billing Address</h3>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Attention</label>
+                                    <input type="text" placeholder="Attention" pInputText
+                                        formControlName="billingAttention" class="w-full">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Country/Region</label>
+                                    <p-select [options]="countryOptions" formControlName="billingCountry"
+                                        placeholder="Select" styleClass="w-full">
+                                    </p-select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                                    <textarea pInputTextarea placeholder="Street 1" formControlName="billingStreet1"
+                                        class="w-full mb-2" rows="2"></textarea>
+                                    <textarea pInputTextarea placeholder="Street 2" formControlName="billingStreet2"
+                                        class="w-full" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-medium text-gray-900">Shipping Address</h3>
+                                <div class="flex items-center">
+                                    <p-checkbox formControlName="copyBillingAddress" inputId="copyBilling">
+                                    </p-checkbox>
+                                    <label for="copyBilling" class="ml-2 text-sm text-blue-600 cursor-pointer">
+                                        Copy billing address
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Attention</label>
+                                    <input type="text" placeholder="Attention" pInputText
+                                        formControlName="shippingAttention" class="w-full">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Country/Region</label>
+                                    <p-select [options]="countryOptions" formControlName="shippingCountry"
+                                        placeholder="Select" styleClass="w-full">
+                                    </p-select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                                    <textarea pInputTextarea placeholder="Street 1" formControlName="shippingStreet1"
+                                        class="w-full mb-2" rows="2"></textarea>
+                                    <textarea pInputTextarea placeholder="Street 2" formControlName="shippingStreet2"
+                                        class="w-full" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
+            <div class="flex justify-end md:justify-start space-x-4 mt-8 pt-6 border-t border-gray-200">
+                <button pButton label="Save" class="p-button-success" (click)="onSave()"></button>
+                <button pButton label="Cancel" class="p-button-secondary" (click)="onCancel()"></button>
+            </div>
+        </div>
+    </form>
+</div>

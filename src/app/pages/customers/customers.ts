@@ -4,6 +4,7 @@ import {ButtonDirective, ButtonIcon, ButtonLabel} from 'primeng/button';
 import {CurrencyPipe} from '@angular/common';
 import {HeaderComponent} from '../../shared/header/header';
 import {TableModule} from "primeng/table";
+import { RouterLink } from '@angular/router';
 
 interface Customer {
     name: string;
@@ -16,7 +17,12 @@ interface Customer {
 @Component({
     selector: 'app-customers',
     standalone: true,
-    imports: [HeaderComponent, NgClass, CurrencyPipe, TableModule, ButtonDirective, ButtonLabel, ButtonIcon],
+    imports: [
+        HeaderComponent, 
+        NgClass, 
+        CurrencyPipe, 
+        TableModule,
+        ButtonDirective, ButtonLabel, ButtonIcon, RouterLink],
     templateUrl: './customers.html',
     styleUrl: './customers.scss'
 })
