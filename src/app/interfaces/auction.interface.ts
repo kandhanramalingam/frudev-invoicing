@@ -1,0 +1,34 @@
+export interface Auction {
+    id: number
+    NameOfAuction: string
+    DateOfAuction: string
+    address1: string
+    address2: string
+    address3: string
+    GpsCord1: string
+    GpsCord2: string
+    website: string
+    aucCategoryName: string
+    aucCategoryId: number
+    layout: string
+    SellerName: string
+    AuctioneerName: string
+    logo_name: string
+    seller_logo: string
+    map: string
+    terms_condition: string
+    applogo: string
+    sellerhplogo: string
+    catalog: string
+    export_catalogue: string
+    open_date: string
+    close_date: string
+    lockReg: string
+    created_date: string
+    status: string
+    remove_status: string
+    archive_status: string
+    interval: string
+    reject_bid: string
+    transaction: string
+}

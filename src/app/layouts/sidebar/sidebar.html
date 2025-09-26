@@ -1,7 +1,100 @@
-<aside class="w-50 bg-surface-0 border-r border-surface-200 p-3">
-    <div class="flex items-center gap-2 mb-4">
-        <i class="pi pi-cog text-primary-500"></i>
-        <span class="font-semibold">Admin Panel</span>
+<aside class="w-52 border-r h-screen sticky top-0 overflow-auto">
+    <div class="p-4 border-b">
+        <div class="text-lg text-white font-semibold">Wildlife</div>
     </div>
-    <p-tieredMenu appendTo="body" [model]="items"></p-tieredMenu>
+
+    <nav class="px-2 py-4">
+        <ul class="space-y-1">
+            @for (item of menu; track item.label) {
+                <li>
+                    <button
+                            (click)="go(item, $event)"
+                            (keydown.enter)="go(item, $event)"
+                            class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-left group focus:outline-none transition-colors duration-150"
+                            [ngClass]="{'active-menu': isActive(item), 'in-active-menu': !isActive(item)}">
+                        @if (item.icon) {
+                            <i [class]="item.icon"></i>
+                        }
+
+                        <span class="flex-1">{{ item.label }}</span>
+
+                        @if (item.children) {
+                            <span class="flex-none">
+                <svg
+                        [ngClass]="{ 'transform rotate-90': item.open }"
+                        class="w-4 h-4 transition-transform duration-150"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                >
+                  <path d="M9 18l6-6-6-6"></path>
+                </svg>
+              </span>
+                        }
+                    </button>
+
+                    @if (item.children) {
+                        <div
+                                class="pl-6 mt-1 overflow-hidden"
+                                [ngClass]="{ 'max-h-96': item.open, 'max-h-0': !item.open }"
+                                style="transition: max-height .25s ease;"
+                                aria-hidden="{{ !item.open }}"
+                        >
+                            <ul class="space-y-1">
+                                @for (child of item.children; track child.label) {
+                                    <li>
+                                        @if (child.children) {
+                                            <button
+                                                    (click)="go(child, $event)"
+                                                    class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-left transition-colors duration-150"
+                                                    [ngClass]="{'active-menu': isActive(child), 'in-active-menu': !isActive(child)}"
+                                                    aria-expanded="{{ !!child.open }}">
+                                                <span class="flex-1 text-sm">{{ child.label }}</span>
+                                                <svg
+                                                        [ngClass]="{ 'transform rotate-90': child.open }"
+                                                        class="w-3.5 h-3.5 transition-transform duration-150"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                >
+                                                    <path d="M9 18l6-6-6-6"></path>
+                                                </svg>
+                                            </button>
+
+                                            <div
+                                                    class="pl-4 mt-1 overflow-hidden"
+                                                    [ngClass]="{ 'max-h-96': child.open, 'max-h-0': !child.open }"
+                                                    style="transition: max-height .25s ease;"
+                                            >
+                                                <ul class="space-y-1">
+                                                    @for (leaf of child.children; track leaf.label) {
+                                                        <li>
+                                                            <a
+                                                                    [routerLink]="leaf.route"
+                                                                    class="block px-3 py-2 rounded-md text-sm"
+                                                                    [ngClass]="{'active-menu': isActive(leaf), 'in-active-menu': !isActive(leaf)}"
+                                                            >
+                                                                {{ leaf.label }}
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        } @else {
+                                            <a
+                                                    [routerLink]="child.route"
+                                                    class="block px-3 py-2 rounded-md text-sm"
+                                                    [ngClass]="{'active-menu': isActive(child), 'in-active-menu': !isActive(child)}"
+                                            >
+                                                {{ child.label }}
+                                            </a>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    </nav>
 </aside>

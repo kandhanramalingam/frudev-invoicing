@@ -5,3 +5,14 @@ aside {
   height: 100%;
   background: #21263c;
 }
+
+.active-menu {
+  background: #008080 !important;
+  color: #FFFFFF;
+}
+.in-active-menu {
+  color: #FFFFFF;
+  &:hover {
+    background: #333850 !important;
+  }
+}

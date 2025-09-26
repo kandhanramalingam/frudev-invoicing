@@ -1,0 +1,270 @@
+<div id="invoice">
+    <div id="main-container">
+        <div id="inner-container" class="max-w-5xl mx-auto bg-white shadow-lg rounded-lg p-8">
+            <!-- Header -->
+            <div class="border">
+                <div class="flex">
+                    <div id="img">
+                        <img class="px-10" src="assets/img/awa.png">
+                    </div>
+                    <div class="flex-1">
+                        <div class="border-b-2 pb-2 mb-1">
+                            <h1 class="text-base font-bold">AFRICAN WILDLIFE AUCTIONS (PTY) LTD</h1>
+                            <p class="text-gray-600 text-xs">
+                                Postnet Suite 67, Private Bag X 37, Lynnwoodridge 0040 <br>
+                                Portion 33/44 of farm Vaalwater, Kr137, District Waterberg, Limpopo <br>
+                                Tel/Fax: 086 237 2964 | 087 807 8374 <br>
+                                Website: www.wildlifeauctions.co.za | Email: info@awla.co.za <br>
+                                VAT No: 4410 234 027 | Reg No: 2005/042657/07
+                            </p>
+                        </div>
+
+                        <div class="border-b-2 pb-2 mb-1">
+                            <h1 class="text-base font-bold">Bank Details</h1>
+                            <p class="text-gray-700 text-xs">
+                                ABSA - 4083651010 (632005) <br>
+                                FNB - 62466725804 (252045) <br>
+                                Investec - 10011442699 (580105) <br>
+                                Nedbank - 1068875895 (115734) <br>
+                                Standard Bank - 202829138 (012445)
+                            </p>
+                            <p class="text-gray-700 text-xs">Email proof of payment to <b>accounts@awla.co.za</b></p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-base font-bold">Buyer</h3>
+                            <h2 class="font-semibold text-2xl">Tax Invoice</h2>
+                            <div>
+                                <span class="font-semibold text-gray-700 text-xs">#B-RR-1873 Date: 12/09/2025 12-SEPT-2025-AWA-PLAINS-AND-RA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 border-t text-xs">
+                    <div class="p-2 border-r">
+                        <h2 class="font-semibold text-lg">Buyer</h2>
+                        <p>
+                            <span class="font-semibold">KUCHE HUNTING SAFARIS</span><br>
+                            P.O. Box 734, Lephalale, 0555<br>
+                            ZA/LP/105822<br>
+                            Skilpadfontein 328LQ, Steenbokpan
+                        </p>
+                    </div>
+                    <div class="p-2">
+                        <span class="font-semibold">Contact:</span> Koos De Meyer<br>
+                        <span class="font-semibold">Email:</span> hunt@kuche.co.za<br>
+                        <span class="font-semibold">Cell:</span> 084 702 7964<br>
+                        <span class="font-semibold">Tel:</span> 063 368 8505<br>
+                        <span class="font-semibold">VAT No:</span> 4610255996
+                    </div>
+                </div>
+            </div>
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-left">Lot</th>
+                    <th class="text-left">Buyer</th>
+                    <th class="text-left">Item</th>
+                    <th class="text-right">M</th>
+                    <th class="text-right">F</th>
+                    <th class="text-right">T</th>
+                    <th class="text-right">Amount</th>
+                    <th class="text-right">Total</th>
+                    <th class="text-right">VAT</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @for (lot of lotDetails; track lot) {
+                        <tr>
+                            <td class="text-left">{{lot.lot}}</td>
+                            <td class="text-left">{{lot.buyer}}</td>
+                            <td class="text-left">{{lot.item}}</td>
+                            <td class="text-right">{{lot.m}}</td>
+                            <td class="text-right">{{lot.f}}</td>
+                            <td class="text-right">{{lot.t}}</td>
+                            <td class="text-right">{{lot.amount | currency: 'INR': '2'}}</td>
+                            <td class="text-right">{{lot.total | currency: 'INR': '2'}}</td>
+                            <td class="text-right">{{lot.vat | currency: 'INR': '2'}}</td>
+                        </tr>
+                    }
+                <!-- Add remaining rows here (same structure) -->
+                </tbody>
+
+                <tfoot>
+                <tr>
+                    <td class="text-left">Total</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">81</td>
+                    <td class="text-right">4</td>
+                    <td class="text-right">42</td>
+                    <td></td>
+                    <td class="text-right">{{ 12 | currency: 'INR': '2' }}</td>
+                    <td class="text-right">{{ 1223 | currency: 'INR': '2' }}</td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-left">Summary</th>
+                    <th class="text-right">QTY</th>
+                    <th class="text-right">Amount</th>
+                    <th class="text-right">R/Item</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    @for (summary of summaries; track summary) {
+                        <tr>
+                            <td class="text-left">{{summary.name}}</td>
+                            <td class="text-right">{{summary.qty}}</td>
+                            <td class="text-right">{{summary.amount | currency: 'INR': '2'}}</td>
+                            <td class="text-right">{{summary.item | currency: 'INR': '2'}}</td>
+                        </tr>
+                    }
+                </tbody>
+
+                <tfoot>
+                <tr>
+                    <td class="text-left">Total</td>
+                    <td class="text-right">{{100}}</td>
+                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                    <td class="text-right"></td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-left">EXPENSES</th>
+                    <th class="text-left">NOTE</th>
+                    <th class="text-right">BEFORE VAT</th>
+                    <th class="text-right">VAT</th>
+                    <th class="text-right">INCLUSIVE</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td class="text-left">TRANSPORT</td>
+                    <td class="text-left">AWAGC</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                </tr>
+                </tbody>
+
+                <tfoot>
+                <tr>
+                    <td class="text-left">Total</td>
+                    <td class="text-left"></td>
+                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-left">DUE</th>
+                    <th class="text-right">BEFORE VAT</th>
+                    <th class="text-right">VAT</th>
+                    <th class="text-right">INCLUSIVE</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td class="text-left">PURCHASES</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                </tr>
+                <tr>
+                    <td class="text-left">COMMISSION</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                </tr>
+                <tr>
+                    <td class="text-left">EXPENSES</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                </tr>
+                </tbody>
+
+                <tfoot>
+                <tr>
+                    <td class="text-left">Total</td>
+                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-left">PAYMENT METHOD</th>
+                    <th class="text-left">NOTE</th>
+                    <th class="text-right">AMOUNT</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <th class="text-left">EFT NEDBANK</th>
+                    <th class="text-left">22/09/2025</th>
+                    <th class="text-right">{{2500 | currency: 'INR': '2'}}</th>
+                </tr>
+                <tr>
+                    <td class="text-left">Not Paid</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-left">NOTE</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td class="text-left">- -</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-left">I hereby accept the terms and conditions of this auction as per the catalogue and announcement prior to this
+                        auction.</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td class="text-left">
+                        <div class="p-3">_________________________________________&nbsp;&nbsp;Date: _____ / _____ / ___________</div>
+                        <p class="mt-1">E&OE</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

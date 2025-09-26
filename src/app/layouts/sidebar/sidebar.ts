@@ -1,31 +1,57 @@
-import { Component } from '@angular/core';
-import {TieredMenu} from "primeng/tieredmenu";
-import {MenuItem} from "primeng/api";
+import {Component} from '@angular/core';
+import {Router, RouterLink} from "@angular/router";
+import {NgClass} from "@angular/common";
+
+export interface NavItem {
+    label: string;
+    icon?: string; // optional SVG path or class name
+    route?: string;
+    children?: NavItem[];
+    open?: boolean; // UI state (optional initial)
+}
 
 @Component({
-  selector: 'app-sidebar',
+    selector: 'app-sidebar',
     imports: [
-        TieredMenu
+        RouterLink,
+        NgClass
     ],
-  templateUrl: './sidebar.html',
-  styleUrl: './sidebar.scss'
+    templateUrl: './sidebar.html',
+    styleUrl: './sidebar.scss'
 })
 export class Sidebar {
-    items: MenuItem[] = [
-        {
-            label: "Customers",
-            icon: "fa fa-user",
-            routerLink: "/customers"
-        },
-        {
-            label: "Quotes",
-            icon: "fa fa-file-invoice",
-            routerLink: "/quotes",
-        },
-        {
-            label: "Invoices",
-            icon: "fa fa-file-invoice-dollar",
-            routerLink: "/invoices",
-        }
+    menu: NavItem[] = [
+        {label: "Auctions", icon: "fa fa-gavel", route: "/auctions",},
+        {label: "Lots", route: "/lots", icon: "fa fa-list"},
+        {label: "Buyers", route: "/buyers", icon: "fa fa-users"},
+        {label: "Sample Invoice", route: "/sample-invoice", icon: "fa fa-file-invoice-dollar"}
     ];
+
+    constructor(public router: Router) {
+    }
+
+    // toggle open state for a menu item (mutates the item)
+    toggle(item: NavItem, event?: Event) {
+        if (event) event.stopPropagation();
+        item.open = !item.open;
+    }
+
+    // navigate if route exists
+    go(item: NavItem, event?: Event) {
+        if (event) event.stopPropagation();
+        if (item.route) {
+            this.router.navigate([item.route]);
+        } else if (item.children) {
+            this.toggle(item);
+        }
+    }
+
+    // helper to detect if route is active (also checks nested routes)
+    isActive(item: NavItem): boolean {
+        if (item.route && this.router.isActive(item.route, false)) return true;
+        if (item.children) {
+            return item.children.some((c) => this.isActive(c));
+        }
+        return false;
+    }
 }

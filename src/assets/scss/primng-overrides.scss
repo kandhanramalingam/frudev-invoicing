@@ -22,6 +22,12 @@
 .p-tieredmenu-item-link-active {
   background: #008080 !important;
 }
+.p-tieredmenu-item-content {
+  &:hover {
+    border-radius: 5px !important;
+    background: #008080 !important;
+  }
+}
 
 p-table {
   thead {

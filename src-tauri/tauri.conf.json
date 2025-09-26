@@ -13,8 +13,11 @@
     "windows": [
       {
         "title": "frudev-invoicing",
-        "width": 800,
-        "height": 600
+        "width": 1200,
+        "height": 600,
+        "minWidth": 1200,
+        "minHeight": 600,
+        "devtools": false
       }
     ],
     "security": {
