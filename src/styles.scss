@@ -21,26 +21,38 @@
 }
 
 @media print {
+  @page {
+    margin: 0;
+    size: A4;
+  }
+  
   body * {
     visibility: hidden;
   }
 
   #invoiceContent,
   #invoiceContent * {
-    visibility: visible;
-    width: 100%;
+    visibility: visible !important;
+    width: 100% !important;
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
+  
   #inner-container {
     box-shadow: unset !important;
   }
+  
   #invoiceContent {
     position: absolute !important;
     left: 0 !important;
     top: 0 !important;
-    width: 100% !important;
+    width: 100vw !important;
     height: auto !important;
     max-height: none !important;
     overflow: visible !important;
     transform: none !important;
+    margin: 0 !important;
+    padding: 10mm !important;
   }
 }
