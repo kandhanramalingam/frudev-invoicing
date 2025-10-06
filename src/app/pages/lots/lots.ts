@@ -1,23 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {TableModule} from 'primeng/table';
 import {FormsModule} from '@angular/forms';
 import {Select} from 'primeng/select';
 import {InputText} from 'primeng/inputtext';
 import {Button} from 'primeng/button';
-import {Drawer} from 'primeng/drawer';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HeaderComponent} from "../../shared/header/header";
 import {AuctionService} from "../../core/auction.service";
 import {LotService} from "../../core/lot.service";
 import {Auction} from "../../interfaces/auction.interface";
 import {TitleCasePipe} from "@angular/common";
-import {SampleInvoice} from "../sample-invoice/sample-invoice";
 import {Tooltip} from "primeng/tooltip";
+import {SampleInvoice} from "../sample-invoice/sample-invoice";
 import {InvoiceConfigs, InvoiceLotDetail, LotListItem} from "../../interfaces/lot-response.interface";
 
 @Component({
     selector: 'app-auction-lots',
-    imports: [HeaderComponent, TableModule, FormsModule, Select, InputText, Button, Drawer, TitleCasePipe, SampleInvoice, Tooltip],
+    imports: [HeaderComponent, TableModule, FormsModule, Select, InputText, Button, TitleCasePipe, Tooltip, SampleInvoice],
     templateUrl: './lots.html',
     styleUrl: './lots.scss'
 })
@@ -29,10 +28,10 @@ export class AuctionLots implements OnInit {
     loading = false;
     loadingAuctions = false;
     rowsPerPage = 10;
-    showInvoiceModal = false;
-    selectedLot: LotListItem | null = null;
+    showInvoiceView = false;
     invoiceConfig: InvoiceConfigs | null = null;
     invoiceLotDetails: InvoiceLotDetail[] = [];
+
 
     constructor(private auctionSvc: AuctionService, private lotSvc: LotService, private route: ActivatedRoute, private router: Router) {
     }
@@ -66,20 +65,27 @@ export class AuctionLots implements OnInit {
     }
 
     showInvoice(lot: LotListItem) {
-        this.selectedLot = lot;
         this.lotSvc.getInvoiceDetailsFromLot(lot)
             .then((response) => {
                 this.invoiceConfig = response.configs;
                 this.invoiceLotDetails = response.lotDetails;
-                this.showInvoiceModal = true;
+                this.showInvoiceView = true;
             })
-            .catch(err => {
-                console.log(err)
-            });
+            .catch(err => console.log(err));
+    }
+
+    hideInvoice() {
+        this.showInvoiceView = false;
     }
 
     printInvoice() {
         window.print();
     }
 
+    @HostListener('document:keydown.escape')
+    onEscapeKey() {
+        if (this.showInvoiceView) {
+            this.hideInvoice();
+        }
+    }
 }
