@@ -8,7 +8,7 @@
                       (onFilter)="onFilter($event)"></p-select>
         </div>
         <div class="flex flex-col">
-            <label class="text-xs mb-1">Search Lot No</label>
+            <label class="text-xs mb-1">Lot No</label>
             <input pInputText type="text" [(ngModel)]="searchLot" (keyup.enter)="load()" placeholder="Lot number"/>
         </div>
     </div>
@@ -17,11 +17,14 @@
 <p-table [value]="rows" [loading]="loading" [paginator]="rows.length > 0" [rows]="rowsPerPage">
     <ng-template pTemplate="header">
         <tr>
-            <th style="width: 8rem">Lot no</th>
-            <th style="width: 12rem">Wildlife Type</th>
+            <th>Lot no</th>
+            <th>Wildlife Type</th>
             <th>Description</th>
-            <th style="width: 10rem">Lot Type</th>
-            <th style="width: 8rem">Quantity</th>
+            <th style="width: 8rem">Lot Type</th>
+            <th style="width: 5rem">Quantity</th>
+            <th style="width: 8rem">Sold Status</th>
+            <th style="width: 12rem">Buyer</th>
+            <th style="width: 8rem">Actions</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-row>
@@ -31,11 +34,31 @@
             <td>{{ row.description }}</td>
             <td>Per {{ row.price | titlecase }}</td>
             <td>{{ row.sum_total }}</td>
+            <td>
+                @if (row.VMStatus?.toLowerCase() == 'sold') {
+                    <span class="text-green-700">{{ row.VMStatus }}</span>
+                } @else if (row.VMStatus?.toLowerCase() == 's.t.c') {
+                    <span class="text-yellow-600">{{ row.VMStatus }}</span>
+                }
+                @else {
+                    <span class="text-red-600">{{ row.VMStatus }}</span>
+                }
+            </td>
+            <td>
+                {{row.firstName}} {{row.lastName}}
+            </td>
+            <td>
+                <p-button icon="fa fa-file-invoice-dollar" pTooltip="Create Invoice" tooltipPosition="left" size="small" (onClick)="showInvoice(row)"></p-button>
+            </td>
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="5">No lots found</td>
+            <td colspan="7">No lots found</td>
         </tr>
     </ng-template>
 </p-table>
+
+<p-dialog header="Invoice Preview" [(visible)]="showInvoiceModal" [draggable]="false" [modal]="true" [style]="{width: '80vw'}">
+    <app-sample-invoice [config]="invoiceConfig" [lots]="invoiceLotDetails"></app-sample-invoice>
+</p-dialog>

@@ -14,22 +14,23 @@ export class BuyerService {
     const where: string[] = [];
     
     if (auctionId) {
-      where.push('auction_reg_id = ?');
+      where.push('wld_joint_auction_buyers_info.auction_reg_id = ?');
       params.push(auctionId);
     }
     
     if (search && search.trim()) {
-      where.push('(firstName LIKE ? OR lastName LIKE ?)');
+      where.push('(wld_joint_auction_buyers_info.firstName LIKE ? OR wld_joint_auction_buyers_info.lastName LIKE ?)');
       params.push(`%${search.trim()}%`);
       params.push(`%${search.trim()}%`);
     }
     
     const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
-    const orderBy = 'ORDER BY id DESC';
+    const orderBy = 'ORDER BY bidno ASC';
     
     return this.db.query<Buyer>(`SELECT wld_joint_auction_buyers_info.buyer_info_status,
-                                            wld_joint_auction_buyers_info.bidno, wld_users.firstName, wld_users.lastName 
+                                            wld_joint_auction_buyers_info.bidno, wld_users.firstName, wld_users.lastName,
+                                            wld_joint_auction_buyers_info.buyer_id, wld_joint_auction_buyers_info.value_allowed
                                             FROM wld_joint_auction_buyers_info
-                                            join wld_users on wld_joint_auction_buyers_info.buyer_id = wld_users.id ${whereSql} ${orderBy} LIMIT 10`, params);
+                                            left join wld_users on wld_joint_auction_buyers_info.buyer_id = wld_users.id ${whereSql} ${orderBy} LIMIT 1000`, params);
   }
 }

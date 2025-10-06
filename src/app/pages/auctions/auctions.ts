@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header';
-import { ButtonDirective } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
@@ -11,7 +10,7 @@ import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-auctions',
-    imports: [HeaderComponent, ButtonDirective, TableModule, FormsModule, InputText, DatePipe, RouterLink],
+    imports: [HeaderComponent, TableModule, FormsModule, InputText, DatePipe, RouterLink],
   templateUrl: './auctions.html',
   styleUrl: './auctions.scss'
 })

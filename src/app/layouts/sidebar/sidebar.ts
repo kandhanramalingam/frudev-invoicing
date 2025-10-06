@@ -24,6 +24,7 @@ export class Sidebar {
         {label: "Auctions", icon: "fa fa-gavel", route: "/auctions",},
         {label: "Lots", route: "/lots", icon: "fa fa-list"},
         {label: "Buyers", route: "/buyers", icon: "fa fa-users"},
+        {label: "Invoice Config", route: "/invoice-config", icon: "fa fa-sliders"},
         {label: "Sample Invoice", route: "/sample-invoice", icon: "fa fa-file-invoice-dollar"}
     ];
 

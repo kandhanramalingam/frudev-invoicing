@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CurrencyPipe} from "@angular/common";
+import {InvoiceConfigs, InvoiceLotDetail} from "../../interfaces/lot-response.interface";
 
 @Component({
   selector: 'app-sample-invoice',
@@ -9,24 +10,20 @@ import {CurrencyPipe} from "@angular/common";
   templateUrl: './sample-invoice.html',
   styleUrl: './sample-invoice.scss'
 })
-export class SampleInvoice {
-    lotDetails = [
-        {lot: '01-A002', buyer: '30', item: 'Implala Young', m: 1, f: 2, t: 4, amount: 200, total: 2000,  vat: 120},
-        {lot: '01-A002', buyer: '30', item: 'Implala Young', m: 1, f: 2, t: 4, amount: 200, total: 2000,  vat: 120},
-        {lot: '01-A002', buyer: '30', item: 'Implala Young', m: 1, f: 2, t: 4, amount: 200, total: 2000,  vat: 120},
-        {lot: '01-A002', buyer: '30', item: 'Implala Young', m: 1, f: 2, t: 4, amount: 200, total: 2000,  vat: 120},
-        {lot: '01-A002', buyer: '30', item: 'Implala Young', m: 1, f: 2, t: 4, amount: 200, total: 2000,  vat: 120},
-        {lot: '01-A002', buyer: '30', item: 'Implala Young', m: 1, f: 2, t: 4, amount: 200, total: 2000,  vat: 120},
-        {lot: '01-A002', buyer: '30', item: 'Implala Young', m: 1, f: 2, t: 4, amount: 200, total: 2000,  vat: 120},
-    ];
+export class SampleInvoice implements OnChanges {
 
-    summaries = [
-        {name: 'BLUE WILDEBEEST : GOLD BULL', qty: 100, amount: 2000, item: 20500},
-        {name: 'BLUE WILDEBEEST : GOLD BULL', qty: 100, amount: 2000, item: 20500},
-        {name: 'BLUE WILDEBEEST : GOLD BULL', qty: 100, amount: 2000, item: 20500},
-        {name: 'BLUE WILDEBEEST : GOLD BULL', qty: 100, amount: 2000, item: 20500},
-        {name: 'BLUE WILDEBEEST : GOLD BULL', qty: 100, amount: 2000, item: 20500},
-        {name: 'BLUE WILDEBEEST : GOLD BULL', qty: 100, amount: 2000, item: 20500},
-        {name: 'BLUE WILDEBEEST : GOLD BULL', qty: 100, amount: 2000, item: 20500},
-    ];
+    @Input() config: InvoiceConfigs | null = null;
+    @Input() lots: InvoiceLotDetail[] = [];
+    lotList: InvoiceLotDetail[] = [];
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['lots']) {
+            this.lotList = this.lots.map((i) => {
+                return {
+                    ...i,
+                    Vat: (i.Total * parseFloat(this.config?.vat || '0')) / 100
+                };
+            });
+        }
+    }
 }

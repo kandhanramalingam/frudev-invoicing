@@ -9,26 +9,19 @@
                     </div>
                     <div class="flex-1">
                         <div class="border-b-2 pb-2 mb-1">
-                            <h1 class="text-base font-bold">AFRICAN WILDLIFE AUCTIONS (PTY) LTD</h1>
-                            <p class="text-gray-600 text-xs">
-                                Postnet Suite 67, Private Bag X 37, Lynnwoodridge 0040 <br>
-                                Portion 33/44 of farm Vaalwater, Kr137, District Waterberg, Limpopo <br>
-                                Tel/Fax: 086 237 2964 | 087 807 8374 <br>
-                                Website: www.wildlifeauctions.co.za | Email: info@awla.co.za <br>
-                                VAT No: 4410 234 027 | Reg No: 2005/042657/07
-                            </p>
+                            @if (config?.awa_contact) {
+                                <div [innerHTML]="config?.awa_contact"></div>
+                            } @else {
+                                <b>NO DATA</b>
+                            }
                         </div>
 
                         <div class="border-b-2 pb-2 mb-1">
-                            <h1 class="text-base font-bold">Bank Details</h1>
-                            <p class="text-gray-700 text-xs">
-                                ABSA - 4083651010 (632005) <br>
-                                FNB - 62466725804 (252045) <br>
-                                Investec - 10011442699 (580105) <br>
-                                Nedbank - 1068875895 (115734) <br>
-                                Standard Bank - 202829138 (012445)
-                            </p>
-                            <p class="text-gray-700 text-xs">Email proof of payment to <b>accounts@awla.co.za</b></p>
+                            @if (config?.bank_detail) {
+                                <div [innerHTML]="config?.bank_detail"></div>
+                            } @else {
+                                <b>NO DATA</b>
+                            }
                         </div>
 
                         <div>
@@ -76,17 +69,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                    @for (lot of lotDetails; track lot) {
+                    @for (lot of lotList; track lot) {
                         <tr>
-                            <td class="text-left">{{lot.lot}}</td>
-                            <td class="text-left">{{lot.buyer}}</td>
-                            <td class="text-left">{{lot.item}}</td>
-                            <td class="text-right">{{lot.m}}</td>
-                            <td class="text-right">{{lot.f}}</td>
-                            <td class="text-right">{{lot.t}}</td>
-                            <td class="text-right">{{lot.amount | currency: 'INR': '2'}}</td>
-                            <td class="text-right">{{lot.total | currency: 'INR': '2'}}</td>
-                            <td class="text-right">{{lot.vat | currency: 'INR': '2'}}</td>
+                            <td class="text-left">{{lot.Lot}}</td>
+                            <td class="text-left">{{lot.Buyer}}</td>
+                            <td class="text-left">{{lot.Item}}</td>
+                            <td class="text-right">{{lot.M}}</td>
+                            <td class="text-right">{{lot.F}}</td>
+                            <td class="text-right">{{lot.T}}</td>
+                            <td class="text-right">{{lot.Amount | currency: 'INR': ''}}</td>
+                            <td class="text-right">{{lot.Total | currency: 'INR': ''}}</td>
+                            <td class="text-right">{{lot.Vat | currency: 'INR': ''}}</td>
                         </tr>
                     }
                 <!-- Add remaining rows here (same structure) -->
@@ -117,16 +110,16 @@
                 </tr>
                 </thead>
 
-                <tbody>
-                    @for (summary of summaries; track summary) {
-                        <tr>
-                            <td class="text-left">{{summary.name}}</td>
-                            <td class="text-right">{{summary.qty}}</td>
-                            <td class="text-right">{{summary.amount | currency: 'INR': '2'}}</td>
-                            <td class="text-right">{{summary.item | currency: 'INR': '2'}}</td>
-                        </tr>
-                    }
-                </tbody>
+<!--                <tbody>-->
+<!--                    @for (summary of summaries; track summary) {-->
+<!--                        <tr>-->
+<!--                            <td class="text-left">{{summary.name}}</td>-->
+<!--                            <td class="text-right">{{summary.qty}}</td>-->
+<!--                            <td class="text-right">{{summary.amount | currency: 'INR': '2'}}</td>-->
+<!--                            <td class="text-right">{{summary.item | currency: 'INR': '2'}}</td>-->
+<!--                        </tr>-->
+<!--                    }-->
+<!--                </tbody>-->
 
                 <tfoot>
                 <tr>

@@ -9,10 +9,12 @@ import {AuctionService} from "../../core/auction.service";
 import {BuyerService} from "../../core/buyer.service";
 import {Auction} from "../../interfaces/auction.interface";
 import {Buyer} from "../../interfaces/buyer.interface";
+import {Tooltip} from "primeng/tooltip";
+import {CurrencyPipe} from "@angular/common";
 
 @Component({
   selector: 'app-auction-buyers',
-  imports: [HeaderComponent, TableModule, FormsModule, Select, InputText],
+    imports: [HeaderComponent, TableModule, FormsModule, Select, InputText, Tooltip, CurrencyPipe],
   templateUrl: './buyers.html',
   styleUrl: './buyers.scss'
 })
@@ -31,7 +33,9 @@ export class AuctionBuyers implements OnInit {
     this.auctions = await this.auctionSvc.searchAuctions();
     const auctionId = this.route.snapshot.queryParamMap.get('auctionId');
     this.selectedAuctionId = auctionId ? Number(auctionId) : null;
-    await this.load();
+    if (this.selectedAuctionId) {
+      await this.load();
+    }
   }
 
   async onFilter(event: any) {
@@ -41,10 +45,13 @@ export class AuctionBuyers implements OnInit {
   }
 
   async load() {
+    if (!this.selectedAuctionId) {
+      this.rows = [];
+      return;
+    }
     this.loading = true;
     try {
       this.rows = await this.buyerSvc.getBuyers(this.selectedAuctionId, this.searchName);
-        console.log({rows: this.rows})
     } finally {
       this.loading = false;
     }
