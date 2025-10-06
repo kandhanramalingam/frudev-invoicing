@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {Select} from 'primeng/select';
 import {InputText} from 'primeng/inputtext';
 import {Button} from 'primeng/button';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {HeaderComponent} from "../../shared/header/header";
 import {AuctionService} from "../../core/auction.service";
 import {LotService} from "../../core/lot.service";
@@ -13,6 +13,7 @@ import {TitleCasePipe} from "@angular/common";
 import {Tooltip} from "primeng/tooltip";
 import {SampleInvoice} from "../sample-invoice/sample-invoice";
 import {InvoiceConfigs, InvoiceLotDetail, LotListItem} from "../../interfaces/lot-response.interface";
+import {ToastService} from "../../core/toast.service";
 
 @Component({
     selector: 'app-auction-lots',
@@ -31,9 +32,10 @@ export class AuctionLots implements OnInit {
     showInvoiceView = false;
     invoiceConfig: InvoiceConfigs | null = null;
     invoiceLotDetails: InvoiceLotDetail[] = [];
+    loadingInvoice = false;
 
 
-    constructor(private auctionSvc: AuctionService, private lotSvc: LotService, private route: ActivatedRoute, private router: Router) {
+    constructor(private auctionSvc: AuctionService, private lotSvc: LotService, private route: ActivatedRoute, private toastService: ToastService) {
     }
 
     async ngOnInit() {
@@ -65,13 +67,20 @@ export class AuctionLots implements OnInit {
     }
 
     showInvoice(lot: LotListItem) {
+        this.loadingInvoice = true;
         this.lotSvc.getInvoiceDetailsFromLot(lot)
             .then((response) => {
                 this.invoiceConfig = response.configs;
                 this.invoiceLotDetails = response.lotDetails;
                 this.showInvoiceView = true;
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                this.toastService.showError('Failed to load invoice details');
+            })
+            .finally(() => {
+                this.loadingInvoice = false;
+            });
     }
 
     hideInvoice() {

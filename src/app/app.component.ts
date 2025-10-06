@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
-import { invoke } from "@tauri-apps/api/core";
 import {Sidebar} from "./layouts/sidebar/sidebar";
-import {DbService} from "./core/db.service";
+import {Toast} from "primeng/toast";
 
 @Component({
   selector: "app-root",
-    imports: [RouterOutlet, Sidebar],
+    imports: [RouterOutlet, Sidebar, Toast],
   templateUrl: "./app.component.html",
-  styleUrl: "./app.component.scss",
+  styleUrl: "./app.component.scss"
 })
 export class AppComponent {}

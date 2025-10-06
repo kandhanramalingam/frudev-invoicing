@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { InvoiceService } from '../../core/invoice.service';
 import {Button} from "primeng/button";
+import {ToastService} from "../../core/toast.service";
 
 @Component({
   selector: 'app-invoice-config',
@@ -27,22 +28,33 @@ export class InvoiceConfig implements OnInit {
     ]
   };
 
-  constructor(private invoiceService: InvoiceService) {}
+  constructor(private invoiceService: InvoiceService, private toastService: ToastService) {}
 
   async ngOnInit() {
-    const configs = await this.invoiceService.getConfig();
-    this.config = {
-      awa_contact: configs['awa_contact'] || '',
-      bank_detail: configs['bank_detail'] || '',
-      vat: configs['vat'] || ''
-    };
+    try {
+      const configs = await this.invoiceService.getConfig();
+      this.config = {
+        awa_contact: configs['awa_contact'] || '',
+        bank_detail: configs['bank_detail'] || '',
+        vat: configs['vat'] || ''
+      };
+    } catch (err) {
+      console.log(err);
+      this.toastService.showError('Failed to load invoice configuration');
+    }
   }
 
   async save() {
-    for (const [type, value] of Object.entries(this.config)) {
-      if (value.trim()) {
-        await this.invoiceService.updateConfig(type, value);
+    try {
+      for (const [type, value] of Object.entries(this.config)) {
+        if (value.trim()) {
+          await this.invoiceService.updateConfig(type, value);
+        }
       }
+      this.toastService.showSuccess('Configuration saved successfully');
+    } catch (err) {
+      console.log(err);
+      this.toastService.showError('Failed to save configuration');
     }
   }
 }

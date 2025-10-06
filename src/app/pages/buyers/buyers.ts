@@ -3,7 +3,7 @@ import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { InputText } from 'primeng/inputtext';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {HeaderComponent} from "../../shared/header/header";
 import {AuctionService} from "../../core/auction.service";
 import {BuyerService} from "../../core/buyer.service";
@@ -11,6 +11,7 @@ import {Auction} from "../../interfaces/auction.interface";
 import {Buyer} from "../../interfaces/buyer.interface";
 import {Tooltip} from "primeng/tooltip";
 import {CurrencyPipe} from "@angular/common";
+import {ToastService} from "../../core/toast.service";
 
 @Component({
   selector: 'app-auction-buyers',
@@ -27,7 +28,7 @@ export class AuctionBuyers implements OnInit {
   loadingAuctions = false;
   rowsPerPage = 10;
 
-  constructor(private auctionSvc: AuctionService, private buyerSvc: BuyerService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private auctionSvc: AuctionService, private buyerSvc: BuyerService, private route: ActivatedRoute, private toastService: ToastService) {}
 
   async ngOnInit() {
     this.auctions = await this.auctionSvc.searchAuctions();
@@ -52,6 +53,9 @@ export class AuctionBuyers implements OnInit {
     this.loading = true;
     try {
       this.rows = await this.buyerSvc.getBuyers(this.selectedAuctionId, this.searchName);
+    } catch (err) {
+      console.log(err);
+      this.toastService.showError('Failed to load buyers');
     } finally {
       this.loading = false;
     }

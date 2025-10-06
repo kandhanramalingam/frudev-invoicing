@@ -7,6 +7,7 @@ import { AuctionService } from '../../core/auction.service';
 import {DatePipe} from "@angular/common";
 import {Auction} from "../../interfaces/auction.interface";
 import {RouterLink} from "@angular/router";
+import {ToastService} from "../../core/toast.service";
 
 @Component({
   selector: 'app-auctions',
@@ -22,7 +23,7 @@ export class Auctions implements OnInit {
   filterDate: string | null = null; // yyyy-mm-dd
   search: string = '';
 
-  constructor(private svc: AuctionService) {}
+  constructor(private svc: AuctionService, private toastService: ToastService) {}
 
   async ngOnInit() {
     await this.load();
@@ -32,14 +33,11 @@ export class Auctions implements OnInit {
     this.loading = true;
     try {
       this.rows = await this.svc.getAuctions(this.filterDate, this.search);
+    } catch (err) {
+      console.log(err);
+      this.toastService.showError('Failed to load auctions');
     } finally {
       this.loading = false;
     }
-  }
-
-  clearFilters() {
-    this.filterDate = null;
-    this.search = '';
-    this.load();
   }
 }
