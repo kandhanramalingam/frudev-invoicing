@@ -82,22 +82,19 @@
                             <td class="text-right">{{lot.Vat | currency: 'INR': ''}}</td>
                         </tr>
                     }
-                <!-- Add remaining rows here (same structure) -->
-                </tbody>
 
-                <tfoot>
-                <tr>
-                    <td class="text-left">Total</td>
-                    <td></td>
-                    <td></td>
-                    <td class="text-right">{{totalOfLot.m}}</td>
-                    <td class="text-right">{{totalOfLot.f}}</td>
-                    <td class="text-right">{{totalOfLot.t}}</td>
-                    <td></td>
-                    <td class="text-right">{{ totalOfLot.amount | currency: 'INR': '' }}</td>
-                    <td class="text-right">{{ totalOfLot.vat | currency: 'INR': '' }}</td>
-                </tr>
-                </tfoot>
+                    <tr class="bg-gray-100 font-bold">
+                        <td class="text-left">Total</td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right">{{totalOfLot.m}}</td>
+                        <td class="text-right">{{totalOfLot.f}}</td>
+                        <td class="text-right">{{totalOfLot.t}}</td>
+                        <td></td>
+                        <td class="text-right">{{ totalOfLot.amount | currency: 'INR': '' }}</td>
+                        <td class="text-right">{{ totalOfLot.vat | currency: 'INR': '' }}</td>
+                    </tr>
+                </tbody>
             </table>
 
             <table class="table">
@@ -119,16 +116,13 @@
                             <td class="text-right">{{summary.RPerItem | currency: 'INR': ''}}</td>
                         </tr>
                     }
+                    <tr class="bg-gray-100 font-bold">
+                        <td class="text-left">Total</td>
+                        <td class="text-right">{{totalOfSummary.qty}}</td>
+                        <td class="text-right">{{totalOfSummary.amount | currency: 'INR': ''}}</td>
+                        <td class="text-right"></td>
+                    </tr>
                 </tbody>
-
-                <tfoot>
-                <tr>
-                    <td class="text-left">Total</td>
-                    <td class="text-right">{{totalOfSummary.qty}}</td>
-                    <td class="text-right">{{totalOfSummary.amount | currency: 'INR': ''}}</td>
-                    <td class="text-right"></td>
-                </tr>
-                </tfoot>
             </table>
 
             <table class="table">
@@ -150,17 +144,14 @@
                     <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
                     <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
                 </tr>
+                    <tr class="bg-gray-100 font-bold">
+                        <td class="text-left">Total</td>
+                        <td class="text-left"></td>
+                        <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                        <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                        <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                    </tr>
                 </tbody>
-
-                <tfoot>
-                <tr>
-                    <td class="text-left">Total</td>
-                    <td class="text-left"></td>
-                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
-                </tr>
-                </tfoot>
             </table>
 
             <table class="table">
@@ -192,16 +183,13 @@
                     <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
                     <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
                 </tr>
-                </tbody>
-
-                <tfoot>
-                <tr>
+                <tr class="bg-gray-100 font-bold">
                     <td class="text-left">Total</td>
                     <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
                     <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
                     <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
                 </tr>
-                </tfoot>
+                </tbody>
             </table>
 
             <table class="table">

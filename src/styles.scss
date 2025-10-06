@@ -73,4 +73,23 @@
     min-width: 20px !important;
     max-width: 20px !important;
   }
+  
+  table thead {
+    display: table-row-group !important;
+  }
+  
+  table {
+    page-break-inside: auto !important;
+  }
+  
+  thead {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  
+  tfoot {
+    display: table-footer-group !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
 }
