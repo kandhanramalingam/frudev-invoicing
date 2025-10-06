@@ -57,12 +57,12 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th class="text-left w-lot-column">Lot</th>
-                    <th class="text-left">Buyer</th>
-                    <th class="text-left">Item</th>
-                    <th class="text-right">M</th>
-                    <th class="text-right">F</th>
-                    <th class="text-right">T</th>
+                    <th class="text-left w-lot-column-90">Lot</th>
+                    <th class="text-left w-lot-column-50">Buyer</th>
+                    <th class="text-left w-lot-column-200">Item</th>
+                    <th class="text-right w-lot-column-20">M</th>
+                    <th class="text-right w-lot-column-20">F</th>
+                    <th class="text-right w-lot-column-20">T</th>
                     <th class="text-right">Amount</th>
                     <th class="text-right">Total</th>
                     <th class="text-right">VAT</th>
@@ -71,12 +71,12 @@
                 <tbody>
                     @for (lot of lotList; track lot) {
                         <tr>
-                            <td class="text-left">{{lot.Lot}}</td>
-                            <td class="text-left">{{lot.Buyer}}</td>
-                            <td class="text-left">{{lot.Item}}</td>
-                            <td class="text-right">{{lot.M}}</td>
-                            <td class="text-right">{{lot.F}}</td>
-                            <td class="text-right">{{lot.T}}</td>
+                            <td class="text-left w-lot-column-90">{{lot.Lot}}</td>
+                            <td class="text-left w-lot-column-50">{{lot.Buyer}}</td>
+                            <td class="text-left w-lot-column-200">{{lot.Item}}</td>
+                            <td class="text-right w-lot-column-20">{{lot.M}}</td>
+                            <td class="text-right w-lot-column-20">{{lot.F}}</td>
+                            <td class="text-right w-lot-column-20">{{lot.T}}</td>
                             <td class="text-right">{{lot.Amount | currency: 'INR': ''}}</td>
                             <td class="text-right">{{lot.Total | currency: 'INR': ''}}</td>
                             <td class="text-right">{{lot.Vat | currency: 'INR': ''}}</td>
@@ -84,7 +84,7 @@
                     }
 
                     <tr class="bg-gray-100 font-bold">
-                        <td class="text-left">Total</td>
+                        <td class="text-left w-lot-column">Total</td>
                         <td></td>
                         <td></td>
                         <td class="text-right">{{totalOfLot.m}}</td>
