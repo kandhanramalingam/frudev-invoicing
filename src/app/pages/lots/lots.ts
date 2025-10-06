@@ -4,13 +4,12 @@ import {FormsModule} from '@angular/forms';
 import {Select} from 'primeng/select';
 import {InputText} from 'primeng/inputtext';
 import {Button} from 'primeng/button';
-import {Dialog} from 'primeng/dialog';
+import {Drawer} from 'primeng/drawer';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HeaderComponent} from "../../shared/header/header";
 import {AuctionService} from "../../core/auction.service";
 import {LotService} from "../../core/lot.service";
 import {Auction} from "../../interfaces/auction.interface";
-import {Lot} from "../../interfaces/lot.interface";
 import {TitleCasePipe} from "@angular/common";
 import {SampleInvoice} from "../sample-invoice/sample-invoice";
 import {Tooltip} from "primeng/tooltip";
@@ -18,7 +17,7 @@ import {InvoiceConfigs, InvoiceLotDetail, LotListItem} from "../../interfaces/lo
 
 @Component({
     selector: 'app-auction-lots',
-    imports: [HeaderComponent, TableModule, FormsModule, Select, InputText, Button, Dialog, TitleCasePipe, SampleInvoice, Tooltip],
+    imports: [HeaderComponent, TableModule, FormsModule, Select, InputText, Button, Drawer, TitleCasePipe, SampleInvoice, Tooltip],
     templateUrl: './lots.html',
     styleUrl: './lots.scss'
 })
@@ -74,6 +73,13 @@ export class AuctionLots implements OnInit {
                 this.invoiceLotDetails = response.lotDetails;
                 this.showInvoiceModal = true;
             })
-            .catch(err => {console.log(err)});
+            .catch(err => {
+                console.log(err)
+            });
     }
+
+    printInvoice() {
+        window.print();
+    }
+
 }

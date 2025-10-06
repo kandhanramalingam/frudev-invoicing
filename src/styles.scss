@@ -12,3 +12,35 @@
     content: "*";
     color: red;
 }
+
+.ql-editor {
+  padding: 2px;
+  p {
+    @apply text-xs;
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #invoiceContent,
+  #invoiceContent * {
+    visibility: visible;
+    width: 100%;
+  }
+  #inner-container {
+    box-shadow: unset !important;
+  }
+  #invoiceContent {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+}

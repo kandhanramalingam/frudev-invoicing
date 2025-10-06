@@ -54,11 +54,19 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="7">No lots found</td>
+            <td colspan="8">No lots found</td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-dialog header="Invoice Preview" [(visible)]="showInvoiceModal" [draggable]="false" [modal]="true" [style]="{width: '80vw'}">
-    <app-sample-invoice [config]="invoiceConfig" [lots]="invoiceLotDetails"></app-sample-invoice>
-</p-dialog>
+<p-drawer [(visible)]="showInvoiceModal" position="left" [style]="{width: '90vw'}">
+    <ng-template pTemplate="header">
+        <div class="flex justify-between items-center w-full">
+            <span class="font-semibold text-lg">Invoice Preview</span>
+            <p-button icon="fa fa-print" (onClick)="printInvoice()" size="small" [text]="true"></p-button>
+        </div>
+    </ng-template>
+    <div id="invoiceContent" class="overflow-auto h-full">
+        <app-sample-invoice [config]="invoiceConfig" [lots]="invoiceLotDetails"></app-sample-invoice>
+    </div>
+</p-drawer>

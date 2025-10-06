@@ -10,7 +10,7 @@
                     <div class="flex-1">
                         <div class="border-b-2 pb-2 mb-1">
                             @if (config?.awa_contact) {
-                                <div [innerHTML]="config?.awa_contact"></div>
+                                <div class="ql-editor" [innerHTML]="config?.awa_contact"></div>
                             } @else {
                                 <b>NO DATA</b>
                             }
@@ -18,7 +18,7 @@
 
                         <div class="border-b-2 pb-2 mb-1">
                             @if (config?.bank_detail) {
-                                <div [innerHTML]="config?.bank_detail"></div>
+                                <div class="ql-editor" [innerHTML]="config?.bank_detail"></div>
                             } @else {
                                 <b>NO DATA</b>
                             }
@@ -90,12 +90,12 @@
                     <td class="text-left">Total</td>
                     <td></td>
                     <td></td>
-                    <td class="text-right">81</td>
-                    <td class="text-right">4</td>
-                    <td class="text-right">42</td>
+                    <td class="text-right">{{totalOfLot.m}}</td>
+                    <td class="text-right">{{totalOfLot.f}}</td>
+                    <td class="text-right">{{totalOfLot.t}}</td>
                     <td></td>
-                    <td class="text-right">{{ 12 | currency: 'INR': '2' }}</td>
-                    <td class="text-right">{{ 1223 | currency: 'INR': '2' }}</td>
+                    <td class="text-right">{{ totalOfLot.amount | currency: 'INR': '' }}</td>
+                    <td class="text-right">{{ totalOfLot.vat | currency: 'INR': '' }}</td>
                 </tr>
                 </tfoot>
             </table>
@@ -110,22 +110,22 @@
                 </tr>
                 </thead>
 
-<!--                <tbody>-->
-<!--                    @for (summary of summaries; track summary) {-->
-<!--                        <tr>-->
-<!--                            <td class="text-left">{{summary.name}}</td>-->
-<!--                            <td class="text-right">{{summary.qty}}</td>-->
-<!--                            <td class="text-right">{{summary.amount | currency: 'INR': '2'}}</td>-->
-<!--                            <td class="text-right">{{summary.item | currency: 'INR': '2'}}</td>-->
-<!--                        </tr>-->
-<!--                    }-->
-<!--                </tbody>-->
+                <tbody>
+                    @for (summary of summaryList; track summary) {
+                        <tr>
+                            <td class="text-left">{{summary.Summary}}</td>
+                            <td class="text-right">{{summary.QTY}}</td>
+                            <td class="text-right">{{summary.Amount | currency: 'INR': ''}}</td>
+                            <td class="text-right">{{summary.RPerItem | currency: 'INR': ''}}</td>
+                        </tr>
+                    }
+                </tbody>
 
                 <tfoot>
                 <tr>
                     <td class="text-left">Total</td>
-                    <td class="text-right">{{100}}</td>
-                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{totalOfSummary.qty}}</td>
+                    <td class="text-right">{{totalOfSummary.amount | currency: 'INR': ''}}</td>
                     <td class="text-right"></td>
                 </tr>
                 </tfoot>
