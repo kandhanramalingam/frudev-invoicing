@@ -30,10 +30,10 @@ CREATE TABLE wld_vehicles (
       description TEXT,
       registrationNumber VARCHAR(100),
       licenceCode VARCHAR(50),
-      rate FLOAT,                -- ✅ use FLOAT instead of DECIMAL to avoid driver issues
+      rate FLOAT,
       type VARCHAR(100),
       code VARCHAR(100),
-      active TINYINT(1) DEFAULT 1  -- ✅ standard MySQL boolean type
+      active TINYINT(1) DEFAULT 1
 );
 
 CREATE TABLE wld_vehicle_compartment_details (

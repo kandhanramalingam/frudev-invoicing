@@ -12,12 +12,14 @@
   <ng-template pTemplate="header">
     <tr>
       <th>Name</th>
+      <th style="width: 10rem">Size</th>
       <th style="width: 8rem">Action</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-compartment>
     <tr>
       <td>{{ compartment.name }}</td>
+      <td>{{ compartment.size || '-' }}</td>
       <td>
         <button 
           class="p-2 hover:bg-gray-100 rounded-full"
@@ -37,7 +39,7 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="2">{{ searchTerm ? 'No matching compartments found' : 'No vehicle compartments found' }}</td>
+      <td colspan="3">{{ searchTerm ? 'No matching compartments found' : 'No vehicle compartments found' }}</td>
     </tr>
   </ng-template>
 </p-table>
@@ -52,6 +54,14 @@
         placeholder="Enter vehicle compartment name"
         class="w-full" 
         required />
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-2">Size</label>
+      <input 
+        pInputText 
+        [(ngModel)]="newVehicleCompartmentSize" 
+        placeholder="Enter size (optional)"
+        class="w-full" />
     </div>
     
     <div class="flex gap-2 pt-4">

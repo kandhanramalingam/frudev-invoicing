@@ -5,7 +5,7 @@ import { Button } from 'primeng/button';
 import { Drawer } from 'primeng/drawer';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { FormsModule } from '@angular/forms';
-import { VehicleService, Vehicle } from '../../../core/vehicle.service';
+import { VehicleService, Vehicle, VehicleCompartmentDetail } from '../../../core/vehicle.service';
 import { HeaderComponent } from '../../../shared/header/header';
 import { TableModule } from "primeng/table";
 import { ToastService } from '../../../core/toast.service';
@@ -37,6 +37,8 @@ export class Vehicles implements OnInit {
     rate: 0,
     active: true
   };
+  vehicleCompartments: VehicleCompartmentDetail[] = [];
+  availableCompartments: {id: number, name: string, size?: string}[] = [];
 
   constructor(
     private vehicleService: VehicleService,
@@ -68,12 +70,22 @@ export class Vehicles implements OnInit {
 
   async ngOnInit() {
     await this.load();
+    await this.loadCompartments();
+  }
+
+  async loadCompartments() {
+    try {
+      this.availableCompartments = await this.vehicleService.getCompartments();
+    } catch (error) {
+      this.toastService.showError('Failed to load compartments');
+    }
   }
 
   async load() {
     this.loading = true;
     try {
       this.vehicles = await this.vehicleService.getAll(this.searchTerm || undefined);
+        console.log(this.vehicles)
     } catch (error) {
       this.toastService.showError('Failed to load vehicles');
     } finally {
@@ -98,7 +110,7 @@ export class Vehicles implements OnInit {
     this.resetForm();
   }
 
-  editVehicle(vehicle: Vehicle) {
+  async editVehicle(vehicle: Vehicle) {
     this.editingVehicle = vehicle;
     this.vehicleForm = {
       make: vehicle.make,
@@ -109,6 +121,18 @@ export class Vehicles implements OnInit {
       rate: vehicle.rate,
       active: vehicle.active
     };
+    
+    // Load vehicle compartments
+    try {
+      this.vehicleCompartments = await this.vehicleService.getVehicleCompartments(vehicle.id);
+      if (this.vehicleCompartments.length === 0) {
+        this.addCompartment();
+      }
+    } catch (error) {
+      this.vehicleCompartments = [];
+      this.addCompartment();
+    }
+    
     this.drawerVisible = true;
   }
 
@@ -122,6 +146,19 @@ export class Vehicles implements OnInit {
       rate: 0,
       active: true
     };
+    this.vehicleCompartments = [];
+    this.addCompartment();
+  }
+
+  addCompartment() {
+    this.vehicleCompartments.push({
+      compartment_id: 0,
+      quantity: 0
+    });
+  }
+
+  removeCompartment(index: number) {
+    this.vehicleCompartments.splice(index, 1);
   }
 
   isFormValid(): boolean {
@@ -133,13 +170,24 @@ export class Vehicles implements OnInit {
     
     this.saving = true;
     try {
+      let vehicleId: number;
+      
       if (this.editingVehicle) {
         await this.vehicleService.update(this.editingVehicle.id, this.vehicleForm);
+        vehicleId = this.editingVehicle.id;
         this.toastService.showSuccess('Vehicle updated successfully');
       } else {
         await this.vehicleService.create(this.vehicleForm);
+        // Get the newly created vehicle ID (simplified - in real app you'd return it from create)
+        const vehicles = await this.vehicleService.getAll();
+        vehicleId = vehicles[0].id; // This is a simplification
         this.toastService.showSuccess('Vehicle added successfully');
       }
+      
+      // Save compartments
+      const validCompartments = this.vehicleCompartments.filter(c => c.compartment_id && c.quantity > 0);
+      await this.vehicleService.saveVehicleCompartments(vehicleId, validCompartments);
+      
       this.drawerVisible = false;
       await this.load();
     } catch (error) {

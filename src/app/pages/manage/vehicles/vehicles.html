@@ -14,6 +14,7 @@
       <th>Vehicle Details</th>
       <th style="width: 8rem">Code</th>
       <th style="width: 10rem">Reg Number</th>
+      <th style="width: 12rem">Compartments</th>
       <th style="width: 8rem">Rate</th>
       <th style="width: 8rem">Status</th>
       <th style="width: 6rem">Action</th>
@@ -29,6 +30,7 @@
       </td>
       <td>{{ vehicle.code }}</td>
       <td>{{ vehicle.registrationNumber }}</td>
+      <td class="text-sm text-gray-600">{{ vehicle.compartments_display }}</td>
       <td>{{ vehicle.rate | currency:'ZAR':'':'1.2-2' }}</td>
       <td>
         <span [ngClass]="{
@@ -57,7 +59,7 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="6">{{ searchTerm ? 'No matching vehicles found' : 'No vehicles found' }}</td>
+      <td colspan="7">{{ searchTerm ? 'No matching vehicles found' : 'No vehicles found' }}</td>
     </tr>
   </ng-template>
 </p-table>
@@ -89,6 +91,36 @@
         <label class="block text-sm font-medium mb-2">Rate</label>
         <input pInputText [(ngModel)]="vehicleForm.rate" type="number" step="0.01" placeholder="Enter rate" class="w-full" />
       </div>
+    </div>
+    
+    <div>
+      <div class="flex justify-between items-center mb-3">
+        <label class="block text-sm font-medium">Compartments</label>
+        <button type="button" (click)="addCompartment()" class="text-blue-500 hover:text-blue-700">
+          <i class="fa fa-plus"></i> Add Compartment
+        </button>
+      </div>
+      
+      @for (comp of vehicleCompartments; track $index) {
+        <div class="grid grid-cols-12 gap-2 mb-2 items-end">
+          <div class="col-span-8">
+            <select [(ngModel)]="comp.compartment_id" class="w-full p-2 border rounded">
+              <option value="">Select Compartment</option>
+              @for (compartment of availableCompartments; track compartment.id) {
+                <option [value]="compartment.id">{{ compartment.name }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-span-2">
+            <input [(ngModel)]="comp.quantity" type="number" min="0" placeholder="Qty" class="w-full p-2 border rounded" />
+          </div>
+          <div class="col-span-2">
+            <button type="button" (click)="removeCompartment($index)" class="text-red-500 hover:text-red-700 p-2">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      }
     </div>
     
     <div class="flex gap-2 pt-4">

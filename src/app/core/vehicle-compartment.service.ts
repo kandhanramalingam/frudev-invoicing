@@ -4,6 +4,7 @@ import { DbService } from './db.service';
 export interface VehicleCompartment {
   id: number;
   name: string;
+  size?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -12,7 +13,7 @@ export class VehicleCompartmentService {
 
   async getAll(search?: string): Promise<VehicleCompartment[]> {
     try {
-      let sql = 'SELECT id, name FROM wld_vehicle_compartments';
+      let sql = 'SELECT id, name, size FROM wld_vehicle_compartments';
       const params: any[] = [];
       
       if (search) {
@@ -27,17 +28,17 @@ export class VehicleCompartmentService {
     }
   }
 
-  async create(name: string): Promise<void> {
+  async create(data: {name: string, size?: string}): Promise<void> {
     try {
-      await this.db.execute('INSERT INTO wld_vehicle_compartments (name) VALUES (?)', [name]);
+      await this.db.execute('INSERT INTO wld_vehicle_compartments (name, size) VALUES (?, ?)', [data.name, data.size || '']);
     } catch (error) {
       throw new Error('Failed to create vehicle compartment');
     }
   }
 
-  async update(id: number, name: string): Promise<void> {
+  async update(id: number, data: {name: string, size?: string}): Promise<void> {
     try {
-      await this.db.execute('UPDATE wld_vehicle_compartments SET name = ? WHERE id = ?', [name, id]);
+      await this.db.execute('UPDATE wld_vehicle_compartments SET name = ?, size = ? WHERE id = ?', [data.name, data.size || '', id]);
     } catch (error) {
       throw new Error('Failed to update vehicle compartment');
     }

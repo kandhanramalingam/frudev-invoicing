@@ -24,6 +24,7 @@ export class VehicleCompartments implements OnInit {
   loading = false;
   drawerVisible = false;
   newVehicleCompartmentName = '';
+  newVehicleCompartmentSize = '';
   saving = false;
   editingVehicleCompartment: VehicleCompartment | null = null;
   selectedCompartment: VehicleCompartment | null = null;
@@ -58,6 +59,7 @@ export class VehicleCompartments implements OnInit {
     this.editingVehicleCompartment = null;
     this.drawerVisible = true;
     this.newVehicleCompartmentName = '';
+    this.newVehicleCompartmentSize = '';
   }
 
   editVehicleCompartment(vehicleCompartment: VehicleCompartment | null) {
@@ -66,6 +68,7 @@ export class VehicleCompartments implements OnInit {
     }
     this.editingVehicleCompartment = vehicleCompartment;
     this.newVehicleCompartmentName = vehicleCompartment.name;
+    this.newVehicleCompartmentSize = (vehicleCompartment as any).size || '';
     this.drawerVisible = true;
   }
 
@@ -74,11 +77,16 @@ export class VehicleCompartments implements OnInit {
     
     this.saving = true;
     try {
+      const compartmentData = {
+        name: this.newVehicleCompartmentName.trim(),
+        size: this.newVehicleCompartmentSize.trim()
+      };
+      
       if (this.editingVehicleCompartment) {
-        await this.vehicleCompartmentService.update(this.editingVehicleCompartment.id, this.newVehicleCompartmentName.trim());
+        await this.vehicleCompartmentService.update(this.editingVehicleCompartment.id, compartmentData);
         this.toastService.showSuccess('Vehicle compartment updated successfully');
       } else {
-        await this.vehicleCompartmentService.create(this.newVehicleCompartmentName.trim());
+        await this.vehicleCompartmentService.create(compartmentData);
         this.toastService.showSuccess('Vehicle compartment added successfully');
       }
       this.drawerVisible = false;
