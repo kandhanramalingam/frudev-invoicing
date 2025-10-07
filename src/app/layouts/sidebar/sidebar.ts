@@ -24,7 +24,8 @@ export class Sidebar {
         {label: "Auctions", icon: "fa fa-gavel", route: "/auctions",},
         {label: "Lots", route: "/lots", icon: "fa fa-list"},
         {label: "Buyers", route: "/buyers", icon: "fa fa-users"},
-        {label: "Invoice Config", route: "/invoice-config", icon: "fa fa-sliders"}
+        {label: "Invoice Config", route: "/invoice-config", icon: "fa fa-sliders"},
+        {label: "Manage", route: "/manage", icon: "fa fa-cogs"}
     ];
 
     constructor(public router: Router) {

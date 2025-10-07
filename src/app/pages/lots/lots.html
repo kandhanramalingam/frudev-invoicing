@@ -15,7 +15,7 @@
         </div>
     </app-header>
 
-    <p-table [value]="rows" [loading]="loading" [paginator]="rows.length > 0" [rows]="rowsPerPage">
+    <p-table [value]="rows" [loading]="loading" [paginator]="rows.length > 0" [rows]="rowsPerPage" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
         <ng-template pTemplate="header">
             <tr>
                 <th>Lot no</th>

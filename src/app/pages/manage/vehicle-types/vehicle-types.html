@@ -1,0 +1,72 @@
+<app-header title="">
+  <div actions class="flex gap-2 items-end">
+    <div class="flex flex-col">
+      <label class="text-xs mb-1">Search</label>
+      <input pInputText [(ngModel)]="searchTerm" placeholder="Search types" class="text-sm" />
+    </div>
+    <p-button label="Add Type" size="small" (click)="openDrawer()"></p-button>
+  </div>
+</app-header>
+
+<p-table [value]="filteredTypes" [loading]="loading" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Name</th>
+      <th style="width: 8rem">Action</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-type>
+    <tr>
+      <td>{{ type.name }}</td>
+      <td>
+        <button 
+          class="p-2 hover:bg-gray-100 rounded-full"
+          (click)="selectedType = type; menu.toggle($event)">
+          <i class="fa fa-ellipsis-v text-gray-500"></i>
+        </button>
+        <p-menu [model]="actionMenus" appendTo="body" #menu [popup]="true">
+          <ng-template pTemplate="item" let-item>
+              <a pRipple class="flex items-center p-menu-item-link">
+                  <span [class]="item.icon" [ngClass]="item.styleClass"></span>
+                  <span class="ml-2" [ngClass]="item.styleClass">{{ item.label }}</span>
+              </a>
+          </ng-template>
+        </p-menu>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="2">{{ searchTerm ? 'No matching types found' : 'No vehicle types found' }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-drawer [(visible)]="drawerVisible" [header]="editingVehicleType ? 'Edit Vehicle Type' : 'Add Vehicle Type'" position="right">
+  <div class="space-y-4">
+    <div>
+      <label class="block text-sm font-medium mb-2">Name</label>
+      <input 
+        pInputText 
+        [(ngModel)]="newVehicleTypeName" 
+        placeholder="Enter vehicle type name"
+        class="w-full" />
+    </div>
+    
+    <div class="flex gap-2 pt-4">
+      <p-button 
+        [label]="editingVehicleType ? 'Update' : 'Save'" 
+        (click)="saveVehicleType()" 
+        [loading]="saving"
+        [disabled]="!newVehicleTypeName.trim()"
+        size="small"></p-button>
+      <p-button 
+        label="Cancel" 
+        severity="secondary" 
+        (click)="drawerVisible = false"
+        size="small"></p-button>
+    </div>
+  </div>
+</p-drawer>
+
+<p-confirmDialog></p-confirmDialog>
