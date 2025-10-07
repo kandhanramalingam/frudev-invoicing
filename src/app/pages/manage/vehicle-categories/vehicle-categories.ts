@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Menu } from 'primeng/menu';
-import { ConfirmationService } from 'primeng/api';
+import { MenuItem, ConfirmationService } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { Drawer } from 'primeng/drawer';
 import { InputText } from 'primeng/inputtext';
@@ -10,17 +10,17 @@ import { VehicleCategoryService, VehicleCategory } from '../../../core/vehicle-c
 import { HeaderComponent } from '../../../shared/header/header';
 import { TableModule } from "primeng/table";
 import { ToastService } from '../../../core/toast.service';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-categories',
-  imports: [Menu, HeaderComponent, TableModule, Button, Drawer, InputText, FormsModule, ConfirmDialog],
+  imports: [Menu, HeaderComponent, TableModule, Button, Drawer, InputText, FormsModule, ConfirmDialog, NgClass],
   providers: [ConfirmationService],
   templateUrl: './vehicle-categories.html',
   styleUrl: './vehicle-categories.scss'
 })
 export class VehicleCategories implements OnInit {
   vehicleCategories: VehicleCategory[] = [];
-  filteredCategories: VehicleCategory[] = [];
   loading = false;
   drawerVisible = false;
   newVehicleCategoryName = '';
@@ -28,6 +28,10 @@ export class VehicleCategories implements OnInit {
   editingVehicleCategory: VehicleCategory | null = null;
   selectedCategory: VehicleCategory | null = null;
   searchTerm = '';
+  actionMenus: MenuItem[] = [
+    {label: 'Edit', icon: 'fa fa-pencil', command: () => this.editVehicleCategory(this.selectedCategory)},
+    {label: 'Delete', styleClass: 'text-red-600', icon: 'fa fa-trash', command: () => this.confirmDelete(this.selectedCategory)}
+  ];
 
   constructor(
     private vehicleCategoryService: VehicleCategoryService,
@@ -42,32 +46,11 @@ export class VehicleCategories implements OnInit {
   async load() {
     this.loading = true;
     try {
-      this.vehicleCategories = await this.vehicleCategoryService.getAll();
-      this.filterCategories();
+      this.vehicleCategories = await this.vehicleCategoryService.getAll(this.searchTerm || undefined);
     } catch (error) {
       this.toastService.showError('Failed to load vehicle categories');
     } finally {
       this.loading = false;
-    }
-  }
-
-  filterCategories() {
-    if (!this.searchTerm) {
-      this.filteredCategories = [...this.vehicleCategories];
-    } else {
-      this.filteredCategories = this.vehicleCategories.filter(category =>
-        category.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-  }
-
-  ngAfterViewInit() {
-    // Watch for search term changes
-    const searchInput = document.querySelector('input[placeholder="Search categories"]') as HTMLInputElement;
-    if (searchInput) {
-      searchInput.addEventListener('input', () => {
-        this.filterCategories();
-      });
     }
   }
 
@@ -114,10 +97,19 @@ export class VehicleCategories implements OnInit {
     this.confirmationService.confirm({
       message: `Are you sure you want to delete "${vehicleCategory.name}"?`,
       header: 'Delete Confirmation',
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'fa fa-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => this.deleteVehicleCategory(vehicleCategory.id)
     });
+  }
+
+  clearValidations() {
+    setTimeout(() => {
+      const inputs = document.querySelectorAll('p-drawer input');
+      inputs.forEach((input: any) => {
+        input.classList.remove('ng-invalid', 'ng-touched');
+      });
+    }, 100);
   }
 
   async deleteVehicleCategory(id: number) {

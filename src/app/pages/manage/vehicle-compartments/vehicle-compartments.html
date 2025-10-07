@@ -2,26 +2,26 @@
   <div actions class="flex gap-2 items-end">
     <div class="flex flex-col">
       <label class="text-xs mb-1">Search</label>
-      <input pInputText [(ngModel)]="searchTerm" (keyup.enter)="load()" placeholder="Search categories" class="text-sm" />
+      <input pInputText [(ngModel)]="searchTerm" (keyup.enter)="load()" placeholder="Search compartments" class="text-sm" />
     </div>
-    <p-button label="Add Category" size="small" (click)="openDrawer()"></p-button>
+    <p-button label="Add Compartment" size="small" (click)="openDrawer()"></p-button>
   </div>
 </app-header>
 
-<p-table [value]="vehicleCategories" [loading]="loading" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+<p-table [value]="vehicleCompartments" [loading]="loading" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
   <ng-template pTemplate="header">
     <tr>
       <th>Name</th>
       <th style="width: 8rem">Action</th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-category>
+  <ng-template pTemplate="body" let-compartment>
     <tr>
-      <td>{{ category.name }}</td>
+      <td>{{ compartment.name }}</td>
       <td>
         <button 
           class="p-2 hover:bg-gray-100 rounded-full"
-          (click)="selectedCategory = category; menu.toggle($event)">
+          (click)="selectedCompartment = compartment; menu.toggle($event)">
           <i class="fa fa-ellipsis-v text-gray-500"></i>
         </button>
         <p-menu [model]="actionMenus" appendTo="body" #menu [popup]="true">
@@ -37,29 +37,29 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="2">{{ searchTerm ? 'No matching categories found' : 'No vehicle categories found' }}</td>
+      <td colspan="2">{{ searchTerm ? 'No matching compartments found' : 'No vehicle compartments found' }}</td>
     </tr>
   </ng-template>
 </p-table>
 
-<p-drawer [(visible)]="drawerVisible" [header]="editingVehicleCategory ? 'Edit Vehicle Category' : 'Add Vehicle Category'" position="right" (onHide)="clearValidations()">
+<p-drawer [(visible)]="drawerVisible" [header]="editingVehicleCompartment ? 'Edit Vehicle Compartment' : 'Add Vehicle Compartment'" position="right" (onHide)="clearValidations()">
   <div class="space-y-4">
     <div>
       <label class="block text-sm font-medium mb-2">Name <span class="text-red-500">*</span></label>
       <input 
         pInputText 
-        [(ngModel)]="newVehicleCategoryName" 
-        placeholder="Enter vehicle category name"
+        [(ngModel)]="newVehicleCompartmentName" 
+        placeholder="Enter vehicle compartment name"
         class="w-full" 
         required />
     </div>
     
     <div class="flex gap-2 pt-4">
       <p-button 
-        [label]="editingVehicleCategory ? 'Update' : 'Save'" 
-        (click)="saveVehicleCategory()" 
+        [label]="editingVehicleCompartment ? 'Update' : 'Save'" 
+        (click)="saveVehicleCompartment()" 
         [loading]="saving"
-        [disabled]="!newVehicleCategoryName.trim()"
+        [disabled]="!newVehicleCompartmentName.trim()"
         size="small"></p-button>
       <p-button 
         label="Cancel" 

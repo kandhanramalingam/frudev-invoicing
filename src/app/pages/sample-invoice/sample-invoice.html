@@ -77,9 +77,9 @@
                             <td class="text-right w-lot-column-20">{{lot.M}}</td>
                             <td class="text-right w-lot-column-20">{{lot.F}}</td>
                             <td class="text-right w-lot-column-20">{{lot.T}}</td>
-                            <td class="text-right">{{lot.Amount | currency: 'INR': ''}}</td>
-                            <td class="text-right">{{lot.Total | currency: 'INR': ''}}</td>
-                            <td class="text-right">{{lot.Vat | currency: 'INR': ''}}</td>
+                            <td class="text-right">{{lot.Amount | currency: 'ZAR': '': '1.2-2'}}</td>
+                            <td class="text-right">{{lot.Total | currency: 'ZAR': '': '1.2-2'}}</td>
+                            <td class="text-right">{{lot.Vat | currency: 'ZAR': '': '1.2-2'}}</td>
                         </tr>
                     }
 
@@ -91,8 +91,8 @@
                         <td class="text-right">{{totalOfLot.f}}</td>
                         <td class="text-right">{{totalOfLot.t}}</td>
                         <td></td>
-                        <td class="text-right">{{ totalOfLot.amount | currency: 'INR': '' }}</td>
-                        <td class="text-right">{{ totalOfLot.vat | currency: 'INR': '' }}</td>
+                        <td class="text-right">{{ totalOfLot.amount | currency: 'ZAR': '': '1.2-2' }}</td>
+                        <td class="text-right">{{ totalOfLot.vat | currency: 'ZAR': '': '1.2-2' }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -112,14 +112,14 @@
                         <tr>
                             <td class="text-left">{{summary.Summary}}</td>
                             <td class="text-right">{{summary.QTY}}</td>
-                            <td class="text-right">{{summary.Amount | currency: 'INR': ''}}</td>
-                            <td class="text-right">{{summary.RPerItem | currency: 'INR': ''}}</td>
+                            <td class="text-right">{{summary.Amount | currency: 'ZAR': '': '1.2-2'}}</td>
+                            <td class="text-right">{{summary.RPerItem | currency: 'ZAR': '': '1.2-2'}}</td>
                         </tr>
                     }
                     <tr class="bg-gray-100 font-bold">
                         <td class="text-left">Total</td>
                         <td class="text-right">{{totalOfSummary.qty}}</td>
-                        <td class="text-right">{{totalOfSummary.amount | currency: 'INR': ''}}</td>
+                        <td class="text-right">{{totalOfSummary.amount | currency: 'ZAR': '': '1.2-2'}}</td>
                         <td class="text-right"></td>
                     </tr>
                 </tbody>
@@ -140,16 +140,16 @@
                 <tr>
                     <td class="text-left">TRANSPORT</td>
                     <td class="text-left">AWAGC</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
                 </tr>
                     <tr class="bg-gray-100 font-bold">
                         <td class="text-left">Total</td>
                         <td class="text-left"></td>
-                        <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
-                        <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
-                        <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                        <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
+                        <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
+                        <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -167,27 +167,27 @@
                 <tbody>
                 <tr>
                     <td class="text-left">PURCHASES</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
                 </tr>
                 <tr>
                     <td class="text-left">COMMISSION</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
                 </tr>
                 <tr>
                     <td class="text-left">EXPENSES</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
                 </tr>
                 <tr class="bg-gray-100 font-bold">
                     <td class="text-left">Total</td>
-                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
-                    <td class="text-right">{{2500 | currency: 'INR': '2'}}</td>
+                    <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
+                    <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -205,7 +205,7 @@
                 <tr>
                     <th class="text-left">EFT NEDBANK</th>
                     <th class="text-left">22/09/2025</th>
-                    <th class="text-right">{{2500 | currency: 'INR': '2'}}</th>
+                    <th class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</th>
                 </tr>
                 <tr>
                     <td class="text-left">Not Paid</td>

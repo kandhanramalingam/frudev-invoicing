@@ -13,9 +13,11 @@ export const routes: Routes = [
         loadComponent: () => import("./pages/manage/manage").then(m => m.Manage),
         resolve: { db: DbInitResolver },
         children: [
-            { path: "", redirectTo: "vehicle-types", pathMatch: "full" },
+            { path: "", redirectTo: "vehicles", pathMatch: "full" },
             { path: "vehicle-types", loadComponent: () => import("./pages/manage/vehicle-types/vehicle-types").then(m => m.VehicleTypes) },
-            { path: "vehicle-categories", loadComponent: () => import("./pages/manage/vehicle-categories/vehicle-categories").then(m => m.VehicleCategories) }
+            { path: "vehicle-categories", loadComponent: () => import("./pages/manage/vehicle-categories/vehicle-categories").then(m => m.VehicleCategories) },
+            { path: "vehicle-compartments", loadComponent: () => import("./pages/manage/vehicle-compartments/vehicle-compartments").then(m => m.VehicleCompartments) },
+            { path: "vehicles", loadComponent: () => import("./pages/manage/vehicles/vehicles").then(m => m.Vehicles) }
         ]
     },
 ];

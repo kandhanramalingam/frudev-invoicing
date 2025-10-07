@@ -10,8 +10,10 @@ import { NgClass } from '@angular/common';
 })
 export class Manage {
   tabs = [
+    { label: 'Vehicles', route: '/manage/vehicles' },
     { label: 'Vehicle Types', route: '/manage/vehicle-types' },
-    { label: 'Vehicle Categories', route: '/manage/vehicle-categories' }
+    { label: 'Vehicle Categories', route: '/manage/vehicle-categories' },
+    { label: 'Vehicle Compartments', route: '/manage/vehicle-compartments' }
   ];
 
   constructor(private router: Router) {}

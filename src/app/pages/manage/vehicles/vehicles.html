@@ -1,0 +1,110 @@
+<app-header title="">
+  <div actions class="flex gap-2 items-end">
+    <div class="flex flex-col">
+      <label class="text-xs mb-1">Search</label>
+      <input pInputText [(ngModel)]="searchTerm" (keyup.enter)="load()" placeholder="Search vehicles" class="text-sm" />
+    </div>
+    <p-button label="Add Vehicle" size="small" (click)="openDrawer()"></p-button>
+  </div>
+</app-header>
+
+<p-table [value]="vehicles" [loading]="loading" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Vehicle Details</th>
+      <th style="width: 8rem">Code</th>
+      <th style="width: 10rem">Reg Number</th>
+      <th style="width: 8rem">Rate</th>
+      <th style="width: 8rem">Status</th>
+      <th style="width: 6rem">Action</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-vehicle>
+    <tr>
+      <td>
+        <div class="flex flex-col">
+          <span class="font-medium">{{ vehicle.make }}</span>
+          <span class="text-sm text-gray-500">{{ vehicle.type }} • {{ vehicle.year }}</span>
+        </div>
+      </td>
+      <td>{{ vehicle.code }}</td>
+      <td>{{ vehicle.registrationNumber }}</td>
+      <td>{{ vehicle.rate | currency:'ZAR':'':'1.2-2' }}</td>
+      <td>
+        <span [ngClass]="{
+          'text-green-700': vehicle.active,
+          'text-red-600': !vehicle.active
+        }">
+          {{ vehicle.active ? 'Active' : 'Inactive' }}
+        </span>
+      </td>
+      <td>
+        <button 
+          class="p-2 hover:bg-gray-100 rounded-full"
+          (click)="selectedVehicle = vehicle; menu.toggle($event)">
+          <i class="fa fa-ellipsis-v text-gray-500"></i>
+        </button>
+        <p-menu [model]="getMenuItems(vehicle)" appendTo="body" #menu [popup]="true">
+          <ng-template pTemplate="item" let-item>
+              <a pRipple class="flex items-center p-menu-item-link">
+                  <span [class]="item.icon" [ngClass]="item.styleClass"></span>
+                  <span class="ml-2" [ngClass]="item.styleClass">{{ item.label }}</span>
+              </a>
+          </ng-template>
+        </p-menu>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6">{{ searchTerm ? 'No matching vehicles found' : 'No vehicles found' }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-drawer [(visible)]="drawerVisible" [header]="editingVehicle ? 'Edit Vehicle' : 'Add Vehicle'" position="right" [style]="{width: '600px'}" (onHide)="clearValidations()">
+  <div class="space-y-4">
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-2">Make <span class="text-red-500">*</span></label>
+        <input pInputText [(ngModel)]="vehicleForm.make" placeholder="Enter vehicle make" class="w-full" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2">Year</label>
+        <input pInputText [(ngModel)]="vehicleForm.year" type="number" placeholder="Enter year" class="w-full" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2">Type <span class="text-red-500">*</span></label>
+        <input pInputText [(ngModel)]="vehicleForm.type" placeholder="Enter vehicle type" class="w-full" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2">Code <span class="text-red-500">*</span></label>
+        <input pInputText [(ngModel)]="vehicleForm.code" placeholder="Enter vehicle code" class="w-full" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2">Registration Number</label>
+        <input pInputText [(ngModel)]="vehicleForm.registrationNumber" placeholder="Enter registration number" class="w-full" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2">Rate</label>
+        <input pInputText [(ngModel)]="vehicleForm.rate" type="number" step="0.01" placeholder="Enter rate" class="w-full" />
+      </div>
+    </div>
+    
+    <div class="flex gap-2 pt-4">
+      <p-button 
+        [label]="editingVehicle ? 'Update' : 'Save'" 
+        (click)="saveVehicle()" 
+        [loading]="saving"
+        [disabled]="!isFormValid()"
+        size="small"></p-button>
+      <p-button 
+        label="Cancel" 
+        severity="secondary" 
+        (click)="drawerVisible = false"
+        size="small"></p-button>
+    </div>
+  </div>
+</p-drawer>
+
+<p-confirmDialog></p-confirmDialog>

@@ -10,9 +10,18 @@ export interface VehicleCategory {
 export class VehicleCategoryService {
   constructor(private db: DbService) {}
 
-  async getAll(): Promise<VehicleCategory[]> {
+  async getAll(search?: string): Promise<VehicleCategory[]> {
     try {
-      return await this.db.query<VehicleCategory>('SELECT id, name FROM wld_vehicle_categories ORDER BY name');
+      let sql = 'SELECT id, name FROM wld_vehicle_categories';
+      const params: any[] = [];
+      
+      if (search) {
+        sql += ' WHERE name LIKE ?';
+        params.push(`%${search}%`);
+      }
+      
+      sql += ' ORDER BY name';
+      return await this.db.query<VehicleCategory>(sql, params);
     } catch (error) {
       throw new Error('Failed to load vehicle categories');
     }

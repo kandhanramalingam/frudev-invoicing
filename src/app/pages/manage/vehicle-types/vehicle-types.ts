@@ -21,7 +21,6 @@ import {NgClass} from "@angular/common";
 })
 export class VehicleTypes implements OnInit {
   vehicleTypes: VehicleType[] = [];
-  filteredTypes: VehicleType[] = [];
   loading = false;
   drawerVisible = false;
   newVehicleTypeName = '';
@@ -46,32 +45,11 @@ export class VehicleTypes implements OnInit {
   async load() {
     this.loading = true;
     try {
-      this.vehicleTypes = await this.vehicleTypeService.getAll();
-      this.filterTypes();
+      this.vehicleTypes = await this.vehicleTypeService.getAll(this.searchTerm || undefined);
     } catch (error) {
       this.toastService.showError('Failed to load vehicle types');
     } finally {
       this.loading = false;
-    }
-  }
-
-  filterTypes() {
-    if (!this.searchTerm) {
-      this.filteredTypes = [...this.vehicleTypes];
-    } else {
-      this.filteredTypes = this.vehicleTypes.filter(type =>
-        type.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-  }
-
-  ngAfterViewInit() {
-    // Watch for search term changes
-    const searchInput = document.querySelector('input[placeholder="Search types"]') as HTMLInputElement;
-    if (searchInput) {
-      searchInput.addEventListener('input', () => {
-        this.filterTypes();
-      });
     }
   }
 
@@ -122,6 +100,15 @@ export class VehicleTypes implements OnInit {
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => this.deleteVehicleType(vehicleType.id)
     });
+  }
+
+  clearValidations() {
+    setTimeout(() => {
+      const inputs = document.querySelectorAll('p-drawer input');
+      inputs.forEach((input: any) => {
+        input.classList.remove('ng-invalid', 'ng-touched');
+      });
+    }, 100);
   }
 
   async deleteVehicleType(id: number) {

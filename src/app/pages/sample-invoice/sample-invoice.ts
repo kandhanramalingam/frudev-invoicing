@@ -53,8 +53,6 @@ export class SampleInvoice implements OnChanges {
                     RPerItem: data.amount / data.qty
                 };
             });
-
-            console.log({ list: this.lotList, summary: this.summaryList });
         }
     }
 }

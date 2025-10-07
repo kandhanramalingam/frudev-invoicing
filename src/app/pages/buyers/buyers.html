@@ -37,7 +37,7 @@
                 }
             </td>
             <td>{{ row.bidno }}</td>
-            <td>{{ row.value_allowed | currency: 'INR': 'R' }}</td>
+            <td>{{ row.value_allowed | currency: 'ZAR': '': '1.2-2' }}</td>
             <td>
                 @if (row.buyer_info_status?.toLowerCase() == 'active') {
                     <span class="text-green-700">{{ row.buyer_info_status }}</span>
