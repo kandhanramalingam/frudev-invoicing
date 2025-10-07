@@ -6,7 +6,8 @@ import { Drawer } from 'primeng/drawer';
 import { InputText } from 'primeng/inputtext';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { FormsModule } from '@angular/forms';
-import { VehicleCompartmentService, VehicleCompartment } from '../../../core/vehicle-compartment.service';
+import { VehicleCompartmentService } from '../../../core/vehicle-compartment.service';
+import { VehicleCompartment } from '../../../interfaces/vehicle-compartment.interface';
 import { HeaderComponent } from '../../../shared/header/header';
 import { TableModule } from "primeng/table";
 import { ToastService } from '../../../core/toast.service';
@@ -107,6 +108,7 @@ export class VehicleCompartments implements OnInit {
       header: 'Delete Confirmation',
       icon: 'fa fa-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
+        rejectButtonStyleClass: 'p-button-secondary',
       accept: () => this.deleteVehicleCompartment(vehicleCompartment.id)
     });
   }

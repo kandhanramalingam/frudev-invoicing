@@ -1,6 +1,9 @@
-<div id="invoice">
-    <div id="main-container">
-        <div id="inner-container" class="max-w-5xl mx-auto bg-white shadow-lg rounded-lg p-8">
+<div class="flex h-full">
+  <!-- Invoice Preview -->
+  <div class="flex-1 overflow-hidden">
+    <div id="invoice" class="h-full overflow-y-auto p-4">
+      <div id="main-container">
+        <div id="inner-container" class="bg-white shadow-lg rounded-lg p-8">
             <!-- Header -->
             <div class="border">
                 <div class="flex">
@@ -137,20 +140,22 @@
                 </thead>
 
                 <tbody>
-                <tr>
-                    <td class="text-left">TRANSPORT</td>
-                    <td class="text-left">AWAGC</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
+                @for (expense of expenses; track $index) {
+                  <tr>
+                    <td class="text-left">{{ expense.name || 'EXPENSE' }}</td>
+                    <td class="text-left">{{ expense.note }}</td>
+                    <td class="text-right">{{ expense.beforeVat | currency: 'ZAR': '': '1.2-2' }}</td>
+                    <td class="text-right">{{ expense.vat | currency: 'ZAR': '': '1.2-2' }}</td>
+                    <td class="text-right">{{ expense.inclusive | currency: 'ZAR': '': '1.2-2' }}</td>
+                  </tr>
+                }
+                <tr class="bg-gray-100 font-bold">
+                  <td class="text-left">Total</td>
+                  <td class="text-left"></td>
+                  <td class="text-right">{{ getTotalExpenses('beforeVat') | currency: 'ZAR': '': '1.2-2' }}</td>
+                  <td class="text-right">{{ getTotalExpenses('vat') | currency: 'ZAR': '': '1.2-2' }}</td>
+                  <td class="text-right">{{ getTotalExpenses('inclusive') | currency: 'ZAR': '': '1.2-2' }}</td>
                 </tr>
-                    <tr class="bg-gray-100 font-bold">
-                        <td class="text-left">Total</td>
-                        <td class="text-left"></td>
-                        <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
-                        <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
-                        <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    </tr>
                 </tbody>
             </table>
 
@@ -165,29 +170,19 @@
                 </thead>
 
                 <tbody>
-                <tr>
-                    <td class="text-left">PURCHASES</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                </tr>
-                <tr>
-                    <td class="text-left">COMMISSION</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                </tr>
-                <tr>
-                    <td class="text-left">EXPENSES</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{1245 | currency: 'ZAR': '': '1.2-2'}}</td>
-                </tr>
+                @for (due of dues; track $index) {
+                  <tr>
+                    <td class="text-left">{{ due.name || 'DUE' }}</td>
+                    <td class="text-right">{{ due.beforeVat | currency: 'ZAR': '': '1.2-2' }}</td>
+                    <td class="text-right">{{ due.vat | currency: 'ZAR': '': '1.2-2' }}</td>
+                    <td class="text-right">{{ due.inclusive | currency: 'ZAR': '': '1.2-2' }}</td>
+                  </tr>
+                }
                 <tr class="bg-gray-100 font-bold">
-                    <td class="text-left">Total</td>
-                    <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
-                    <td class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</td>
+                  <td class="text-left">Total</td>
+                  <td class="text-right">{{ getTotalDues('beforeVat') | currency: 'ZAR': '': '1.2-2' }}</td>
+                  <td class="text-right">{{ getTotalDues('vat') | currency: 'ZAR': '': '1.2-2' }}</td>
+                  <td class="text-right">{{ getTotalDues('inclusive') | currency: 'ZAR': '': '1.2-2' }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -202,15 +197,17 @@
                 </thead>
 
                 <tbody>
-                <tr>
-                    <th class="text-left">EFT NEDBANK</th>
-                    <th class="text-left">22/09/2025</th>
-                    <th class="text-right">{{2500 | currency: 'ZAR': '': '1.2-2'}}</th>
-                </tr>
-                <tr>
-                    <td class="text-left">Not Paid</td>
-                    <td></td>
-                    <td></td>
+                @for (payment of payments; track $index) {
+                  <tr>
+                    <td class="text-left">{{ payment.method || 'PAYMENT' }}</td>
+                    <td class="text-left">{{ payment.note }}</td>
+                    <td class="text-right">{{ payment.amount | currency: 'ZAR': '': '1.2-2' }}</td>
+                  </tr>
+                }
+                <tr class="bg-gray-100 font-bold">
+                  <td class="text-left">Total</td>
+                  <td class="text-left"></td>
+                  <td class="text-right">{{ getTotalPayments() | currency: 'ZAR': '': '1.2-2' }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -224,7 +221,7 @@
 
                 <tbody>
                 <tr>
-                    <td class="text-left">- -</td>
+                    <td class="text-left">{{ note || '- -' }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -247,5 +244,129 @@
                 </tbody>
             </table>
         </div>
+      </div>
     </div>
+  </div>
+  
+  <!-- Form Panel -->
+  <div class="w-96 border-l bg-gray-50 h-full overflow-y-auto">
+    <div class="p-4">
+      <h3 class="text-lg font-semibold mb-4">Invoice Details</h3>
+      
+      <!-- Expenses Section -->
+      <p-accordion [value]="0" class="mb-6">
+        <p-accordion-panel [value]="0">
+          <p-accordion-header>
+            <div class="flex justify-between items-center w-full">
+              <span class="font-medium">Expenses</span>
+              <button type="button" (click)="addExpense(); $event.stopPropagation()" class="text-blue-500 hover:text-blue-700 mr-4">
+                <i class="fa fa-plus"></i> Add
+              </button>
+            </div>
+          </p-accordion-header>
+          <p-accordion-content>
+            <div class="space-y-3">
+              @if (expenses.length === 0) {
+                <div class="text-gray-500 text-sm text-center py-4">
+                  No expenses added
+                </div>
+              } @else {
+                @for (expense of expenses; track $index) {
+                  <div class="border rounded p-3 bg-white">
+                    <div class="grid grid-cols-1 gap-2">
+                      <input [(ngModel)]="expense.name" placeholder="Expense Name" class="w-full p-2 border rounded text-sm" />
+                      <input [(ngModel)]="expense.note" placeholder="Note" class="w-full p-2 border rounded text-sm" />
+                      <input [(ngModel)]="expense.beforeVat" type="number" step="0.01" placeholder="Before VAT" class="w-full p-2 border rounded text-sm" (input)="calculateExpenseVat(expense)" />
+                      <div class="text-xs text-gray-600">
+                        VAT: {{ expense.vat | currency:'ZAR':'':'1.2-2' }}<br>
+                        Inclusive: {{ expense.inclusive | currency:'ZAR':'':'1.2-2' }}
+                      </div>
+                      <button type="button" (click)="removeExpense($index)" class="text-red-500 hover:text-red-700 text-sm">
+                        <i class="fa fa-trash"></i> Remove
+                      </button>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </p-accordion-content>
+        </p-accordion-panel>
+          <p-accordion-panel [value]="1">
+              <p-accordion-header>
+                  <div class="flex justify-between items-center w-full">
+                      <span class="font-medium">DUE</span>
+                      <button type="button" (click)="addDue(); $event.stopPropagation()" class="text-blue-500 hover:text-blue-700 mr-4">
+                          <i class="fa fa-plus"></i> Add
+                      </button>
+                  </div>
+              </p-accordion-header>
+              <p-accordion-content>
+                  <div class="space-y-3">
+                      @if (dues.length === 0) {
+                        <div class="text-gray-500 text-sm text-center py-4">
+                          No dues added
+                        </div>
+                      } @else {
+                        @for (due of dues; track $index) {
+                            <div class="border rounded p-3 bg-white">
+                                <div class="grid grid-cols-1 gap-2">
+                                    <input [(ngModel)]="due.name" placeholder="DUE Name" class="w-full p-2 border rounded text-sm" />
+                                    <input [(ngModel)]="due.beforeVat" type="number" step="0.01" placeholder="Before VAT" class="w-full p-2 border rounded text-sm" (input)="calculateDueVat(due)" />
+                                    <div class="text-xs text-gray-600">
+                                        VAT: {{ due.vat | currency:'ZAR':'':'1.2-2' }}<br>
+                                        Inclusive: {{ due.inclusive | currency:'ZAR':'':'1.2-2' }}
+                                    </div>
+                                    <button type="button" (click)="removeDue($index)" class="text-red-500 hover:text-red-700 text-sm">
+                                        <i class="fa fa-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                      }
+                  </div>
+              </p-accordion-content>
+          </p-accordion-panel>
+          <p-accordion-panel [value]="2">
+              <p-accordion-header>
+                  <div class="flex justify-between items-center w-full">
+                      <span class="font-medium">Payment Methods</span>
+                      <button type="button" (click)="addPayment(); $event.stopPropagation()" class="text-blue-500 hover:text-blue-700 mr-4">
+                          <i class="fa fa-plus"></i> Add
+                      </button>
+                  </div>
+              </p-accordion-header>
+              <p-accordion-content>
+                  <div class="space-y-3">
+                      @if (payments.length === 0) {
+                        <div class="text-gray-500 text-sm text-center py-4">
+                          No payment methods added
+                        </div>
+                      } @else {
+                        @for (payment of payments; track $index) {
+                            <div class="border rounded p-3 bg-white">
+                                <div class="grid grid-cols-1 gap-2">
+                                    <input [(ngModel)]="payment.method" placeholder="Payment Method" class="w-full p-2 border rounded text-sm" />
+                                    <input [(ngModel)]="payment.note" placeholder="Note" class="w-full p-2 border rounded text-sm" />
+                                    <input [(ngModel)]="payment.amount" type="number" step="0.01" placeholder="Amount" class="w-full p-2 border rounded text-sm" />
+                                    <button type="button" (click)="removePayment($index)" class="text-red-500 hover:text-red-700 text-sm">
+                                        <i class="fa fa-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                      }
+                  </div>
+              </p-accordion-content>
+          </p-accordion-panel>
+          <p-accordion-panel [value]="3">
+              <p-accordion-header>
+                  <span class="font-medium">Note</span>
+              </p-accordion-header>
+              <p-accordion-content>
+                  <textarea [(ngModel)]="note" placeholder="Enter note..." class="w-full p-2 border rounded text-sm" rows="4"></textarea>
+              </p-accordion-content>
+          </p-accordion-panel>
+      </p-accordion>
+    </div>
+  </div>
 </div>

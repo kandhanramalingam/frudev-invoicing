@@ -14,12 +14,16 @@ import {Tooltip} from "primeng/tooltip";
 import {SampleInvoice} from "../sample-invoice/sample-invoice";
 import {InvoiceConfigs, InvoiceLotDetail, LotListItem} from "../../interfaces/lot-response.interface";
 import {ToastService} from "../../core/toast.service";
+import {ViewChild} from '@angular/core';
+import {ConfirmationService} from 'primeng/api';
+import {ConfirmDialog} from 'primeng/confirmdialog';
 
 @Component({
     selector: 'app-auction-lots',
-    imports: [HeaderComponent, TableModule, FormsModule, Select, InputText, Button, TitleCasePipe, Tooltip, SampleInvoice],
+    imports: [HeaderComponent, TableModule, FormsModule, Select, InputText, Button, TitleCasePipe, Tooltip, SampleInvoice, ConfirmDialog],
     templateUrl: './lots.html',
-    styleUrl: './lots.scss'
+    styleUrl: './lots.scss',
+    providers: [ConfirmationService]
 })
 export class AuctionLots implements OnInit {
     auctions: Auction[] = [];
@@ -33,9 +37,10 @@ export class AuctionLots implements OnInit {
     invoiceConfig: InvoiceConfigs | null = null;
     invoiceLotDetails: InvoiceLotDetail[] = [];
     loadingInvoice = false;
+    @ViewChild(SampleInvoice) sampleInvoiceComponent!: SampleInvoice;
 
 
-    constructor(private auctionSvc: AuctionService, private lotSvc: LotService, private route: ActivatedRoute, private toastService: ToastService) {
+    constructor(private auctionSvc: AuctionService, private lotSvc: LotService, private route: ActivatedRoute, private toastService: ToastService, private confirmationService: ConfirmationService) {
     }
 
     async ngOnInit() {
@@ -88,7 +93,22 @@ export class AuctionLots implements OnInit {
     }
 
     printInvoice() {
-        window.print();
+        const hasExpenses = this.sampleInvoiceComponent?.expenses?.length > 0;
+        
+        if (!hasExpenses) {
+            this.confirmationService.confirm({
+                message: 'You haven’t added any expenses. Do you want to continue printing?',
+                header: 'No Expenses Added',
+                icon: 'pi pi-exclamation-triangle',
+                rejectButtonStyleClass: 'p-button-secondary',
+                acceptButtonStyleClass: 'p-button-primary',
+                accept: () => {
+                    window.print();
+                }
+            });
+        } else {
+            window.print();
+        }
     }
 
     @HostListener('document:keydown.escape')

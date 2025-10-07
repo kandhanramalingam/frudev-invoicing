@@ -5,7 +5,8 @@ import { Button } from 'primeng/button';
 import { Drawer } from 'primeng/drawer';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { FormsModule } from '@angular/forms';
-import { VehicleService, Vehicle, VehicleCompartmentDetail } from '../../../core/vehicle.service';
+import { VehicleService } from '../../../core/vehicle.service';
+import { Vehicle, VehicleCompartmentDetail } from '../../../interfaces/vehicle.interface';
 import { HeaderComponent } from '../../../shared/header/header';
 import { TableModule } from "primeng/table";
 import { ToastService } from '../../../core/toast.service';
@@ -100,6 +101,7 @@ export class Vehicles implements OnInit {
       header: 'Status Change Confirmation',
       icon: 'fa fa-exclamation-triangle',
       acceptButtonStyleClass: vehicle.active ? 'p-button-danger' : 'p-button-success',
+        rejectButtonStyleClass: 'p-button-secondary',
       accept: () => this.updateVehicleStatus(vehicle.id, !vehicle.active)
     });
   }
@@ -203,6 +205,7 @@ export class Vehicles implements OnInit {
       header: 'Delete Confirmation',
       icon: 'fa fa-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',
+        rejectButtonStyleClass: 'p-button-secondary',
       accept: () => this.deleteVehicle(vehicle.id)
     });
   }

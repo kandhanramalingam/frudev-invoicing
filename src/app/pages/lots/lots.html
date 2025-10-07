@@ -60,17 +60,21 @@
         </ng-template>
     </p-table>
 } @else {
-    <div class="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10 no-print">
-        <h2 class="text-xl font-semibold">Invoice Preview</h2>
-        <div class="flex gap-2">
-            <p-button icon="fa fa-print" (onClick)="printInvoice()" size="small" label="Print"></p-button>
-            <p-button icon="fa fa-times" (onClick)="hideInvoice()" size="small" [text]="true" label="Close"></p-button>
+    <div class="h-screen flex flex-col">
+        <div class="flex justify-between items-center p-4 border-b bg-white z-10 no-print flex-shrink-0">
+            <h2 class="text-xl font-semibold">Invoice Preview</h2>
+            <div class="flex gap-2">
+                <p-button icon="fa fa-print" (onClick)="printInvoice()" size="small" label="Print"></p-button>
+                <p-button icon="fa fa-times" (onClick)="hideInvoice()" size="small" [text]="true" label="Close"></p-button>
+            </div>
+        </div>
+        <div id="invoiceContent" class="flex-1 overflow-hidden">
+            <app-sample-invoice #sampleInvoice [config]="invoiceConfig" [lots]="invoiceLotDetails"></app-sample-invoice>
         </div>
     </div>
-    <div id="invoiceContent">
-        <app-sample-invoice [config]="invoiceConfig" [lots]="invoiceLotDetails"></app-sample-invoice>
-    </div>
 }
+
+<p-confirmDialog></p-confirmDialog>
 
 @if (loadingInvoice) {
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

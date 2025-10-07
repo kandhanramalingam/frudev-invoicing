@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DbService } from './db.service';
-
-export interface VehicleType {
-  id: number;
-  name: string;
-}
+import { VehicleType } from '../interfaces/vehicle-type.interface';
 
 @Injectable({ providedIn: 'root' })
 export class VehicleTypeService {

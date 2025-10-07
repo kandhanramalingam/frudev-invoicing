@@ -6,7 +6,8 @@ import { Drawer } from 'primeng/drawer';
 import { InputText } from 'primeng/inputtext';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { FormsModule } from '@angular/forms';
-import { VehicleCategoryService, VehicleCategory } from '../../../core/vehicle-category.service';
+import { VehicleCategoryService } from '../../../core/vehicle-category.service';
+import { VehicleCategory } from '../../../interfaces/vehicle-category.interface';
 import { HeaderComponent } from '../../../shared/header/header';
 import { TableModule } from "primeng/table";
 import { ToastService } from '../../../core/toast.service';
@@ -98,7 +99,7 @@ export class VehicleCategories implements OnInit {
       message: `Are you sure you want to delete "${vehicleCategory.name}"?`,
       header: 'Delete Confirmation',
       icon: 'fa fa-exclamation-triangle',
-      acceptButtonStyleClass: 'p-button-danger',
+      acceptButtonStyleClass: 'p-button-danger', rejectButtonStyleClass: 'p-button-secondary',
       accept: () => this.deleteVehicleCategory(vehicleCategory.id)
     });
   }
