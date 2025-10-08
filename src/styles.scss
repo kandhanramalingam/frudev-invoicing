@@ -22,8 +22,12 @@
 
 @media print {
   @page {
-    margin: 1mm;
+    margin: 5mm;
     size: A4;
+  }
+  
+  @page:first {
+    margin-top: 0;
   }
   
   body * {

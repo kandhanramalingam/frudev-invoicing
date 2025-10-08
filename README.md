@@ -1,3 +1,5 @@
+## Build 
+- npm run tauri build
 ## New Tables
 
 ```sql

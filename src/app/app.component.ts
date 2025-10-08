@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, HostListener } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import {Sidebar} from "./layouts/sidebar/sidebar";
 import {Toast} from "primeng/toast";
@@ -9,4 +9,9 @@ import {Toast} from "primeng/toast";
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss"
 })
-export class AppComponent {}
+export class AppComponent {
+  @HostListener('contextmenu', ['$event'])
+  onRightClick(event: Event) {
+    event.preventDefault();
+  }
+}

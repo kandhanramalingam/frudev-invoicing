@@ -36,12 +36,20 @@ export class LotService {
                                                   wld_lotset.price,
                                                   wld_lotset.sum_total,
                                                   wld_lotset.VMStatus,
-                                                  wld_users.firstName,
-                                                  wld_users.lastName,
+                                                  COALESCE(wld_users.firstName, 
+                                                          CASE WHEN wld_user_auctions.user_id REGEXP '^[0-9]+$' 
+                                                               THEN NULL 
+                                                               ELSE wld_user_auctions.user_id 
+                                                          END) as firstName,
+                                                  COALESCE(wld_users.lastName, '') as lastName,
                                                   wld_lotset.userid,
                                                   wld_lotset.auction_id
                                            FROM wld_lotset
-                                                    left join wld_users on wld_lotset.userid = wld_users.id
+                                                    LEFT JOIN wld_user_auctions ON wld_lotset.wla_lotno = wld_user_auctions.game_id
+                                                    LEFT JOIN wld_users ON CASE WHEN wld_user_auctions.user_id REGEXP '^[0-9]+$' 
+                                                                                THEN wld_user_auctions.user_id = wld_users.id 
+                                                                                ELSE FALSE 
+                                                                           END
                                                ${whereSql}
                                            ORDER BY mainlotno ASC ${limit}`, params);
     }
@@ -49,6 +57,7 @@ export class LotService {
     async getInvoiceDetailsFromLot(lot: LotListItem): Promise<InvoiceResponse> {
         await this.init();
         try {
+            console.log({...lot})
             // Get invoice configs
             const configs = await this.db.query<InvoiceConfig>('SELECT type, value FROM wld_invoice_config');
             const configMap = configs.reduce((acc, config) => {
@@ -94,6 +103,8 @@ export class LotService {
                 `,
                 [userDetailOfLot[0].user_id, lot.auction_id]
             );
+
+            console.log(userDetailOfLot[0].user_id, lot.auction_id);
 
             return {
                 configs: configMap,
