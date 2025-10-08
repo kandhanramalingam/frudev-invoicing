@@ -6,7 +6,7 @@ import { Drawer } from 'primeng/drawer';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { FormsModule } from '@angular/forms';
 import { VehicleService } from '../../../core/vehicle.service';
-import { Vehicle, VehicleCompartmentDetail } from '../../../interfaces/vehicle.interface';
+import { Vehicle, VehicleCompartmentDetail, VehicleCompartmentOption } from '../../../interfaces/vehicle.interface';
 import { HeaderComponent } from '../../../shared/header/header';
 import { TableModule } from "primeng/table";
 import { ToastService } from '../../../core/toast.service';
@@ -39,7 +39,7 @@ export class Vehicles implements OnInit {
     active: true
   };
   vehicleCompartments: VehicleCompartmentDetail[] = [];
-  availableCompartments: {id: number, name: string, size?: string}[] = [];
+  availableCompartments: VehicleCompartmentOption[] = [];
 
   constructor(
     private vehicleService: VehicleService,

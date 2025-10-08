@@ -9,7 +9,7 @@ export const routes: Routes = [
     { path: "invoice-config", loadComponent: () => import("./pages/invoice-config/invoice-config").then(m => m.InvoiceConfig), resolve: { db: DbInitResolver } },
     { path: "sample-invoice", loadComponent: () => import("./pages/sample-invoice/sample-invoice").then(m => m.SampleInvoice), resolve: { db: DbInitResolver } },
     {
-        path: "manage",
+        path: "vehicle",
         loadComponent: () => import("./pages/manage/manage").then(m => m.Manage),
         resolve: { db: DbInitResolver },
         children: [
@@ -18,6 +18,16 @@ export const routes: Routes = [
             { path: "vehicle-categories", loadComponent: () => import("./pages/manage/vehicle-categories/vehicle-categories").then(m => m.VehicleCategories) },
             { path: "vehicle-compartments", loadComponent: () => import("./pages/manage/vehicle-compartments/vehicle-compartments").then(m => m.VehicleCompartments) },
             { path: "vehicles", loadComponent: () => import("./pages/manage/vehicles/vehicles").then(m => m.Vehicles) }
+        ]
+    },
+    {
+        path: "species",
+        loadComponent: () => import("./pages/species/species").then(m => m.Species),
+        resolve: { db: DbInitResolver },
+        children: [
+            { path: "", redirectTo: "species-list", pathMatch: "full" },
+            { path: "species-list", loadComponent: () => import("./pages/species/species-list/species-list").then(m => m.SpeciesList) },
+            { path: "species-categories", loadComponent: () => import("./pages/species/species-categories/species-categories").then(m => m.SpeciesCategories) }
         ]
     },
 ];

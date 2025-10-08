@@ -3,17 +3,15 @@ import { Router, RouterOutlet } from '@angular/router';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-manage',
+  selector: 'app-species',
   imports: [RouterOutlet, NgClass],
-  templateUrl: './manage.html',
-  styleUrl: './manage.scss'
+  templateUrl: './species.html',
+  styleUrl: './species.scss'
 })
-export class Manage {
+export class Species {
   tabs = [
-    { label: 'Vehicles', route: '/vehicle/vehicles' },
-    { label: 'Vehicle Types', route: '/vehicle/vehicle-types' },
-    { label: 'Vehicle Categories', route: '/vehicle/vehicle-categories' },
-    { label: 'Vehicle Compartments', route: '/vehicle/vehicle-compartments' }
+    { label: 'Species', route: '/species/species-list' },
+    { label: 'Species Categories', route: '/species/species-categories' }
   ];
 
   constructor(private router: Router) {}

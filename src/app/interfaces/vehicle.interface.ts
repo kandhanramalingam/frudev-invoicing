@@ -18,3 +18,9 @@ export interface VehicleCompartmentDetail {
   quantity: number;
   size?: string;
 }
+
+export interface VehicleCompartmentOption {
+  id: number;
+  name: string;
+  size?: string;
+}

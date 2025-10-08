@@ -46,4 +46,11 @@ CREATE TABLE wld_vehicle_compartment_details (
      FOREIGN KEY (vehicle_id) REFERENCES wld_vehicles(id),
      FOREIGN KEY (compartment_id) REFERENCES wld_vehicle_compartments(id)
 );
+
+CREATE TABLE wld_species_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+alter table wld_species add column  category_id int(11) default NULL after  status;
 ```
