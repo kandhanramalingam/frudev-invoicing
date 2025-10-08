@@ -103,7 +103,9 @@ export class AuctionLots implements OnInit {
                 rejectButtonStyleClass: 'p-button-secondary',
                 acceptButtonStyleClass: 'p-button-primary',
                 accept: () => {
-                    window.print();
+                    setTimeout(() => {
+                        window.print();
+                    }, 100);
                 }
             });
         } else {
