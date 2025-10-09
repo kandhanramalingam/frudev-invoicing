@@ -18,7 +18,7 @@
     <p-table [value]="rows" [loading]="loading" [paginator]="true" [rows]="rowsPerPage" [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="onPageChange($event)" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
         <ng-template pTemplate="header">
             <tr>
-                <th>Lot no</th>
+                <th>Lot no <i class="fa fa-filter text-gray-400 ml-1"></i></th>
                 <th>Wildlife Type</th>
                 <th>Description</th>
                 <th style="width: 8rem">Lot Type</th>

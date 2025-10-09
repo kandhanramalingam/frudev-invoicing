@@ -9,7 +9,6 @@ export class VehicleCategoryService {
 
   async getAll(search?: string, pagination?: PaginationRequest): Promise<PaginationResponse<VehicleCategory>> {
     try {
-        console.log(pagination)
       const params: any[] = [];
       let whereClause = '';
       

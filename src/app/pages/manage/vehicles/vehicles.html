@@ -11,9 +11,9 @@
 <p-table [value]="vehicles" [loading]="loading" [paginator]="true" [rows]="rowsPerPage" [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="onPageChange($event)" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
   <ng-template pTemplate="header">
     <tr>
-      <th>Vehicle Details</th>
-      <th style="width: 8rem">Code</th>
-      <th style="width: 10rem">Reg Number</th>
+      <th>Vehicle Details <i class="fa fa-filter text-gray-400 ml-1"></i></th>
+      <th style="width: 8rem">Code <i class="fa fa-filter text-gray-400 ml-1"></i></th>
+      <th style="width: 10rem">Reg Number <i class="fa fa-filter text-gray-400 ml-1"></i></th>
       <th style="width: 12rem">Compartments</th>
       <th style="width: 8rem">Rate</th>
       <th style="width: 8rem">Status</th>

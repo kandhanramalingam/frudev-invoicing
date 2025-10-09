@@ -14,8 +14,8 @@
 <p-table [value]="rows" [loading]="loading" [paginator]="true" [rows]="rowsPerPage" [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="onPageChange($event)" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
     <ng-template pTemplate="header">
         <tr>
-            <th style="width: 10rem">Auction Id</th>
-            <th>Auction Name</th>
+            <th style="width: 10rem">Auction Id <i class="fa fa-filter text-gray-400 ml-1"></i></th>
+            <th>Auction Name <i class="fa fa-filter text-gray-400 ml-1"></i></th>
             <th style="width: 12rem">Auction Date</th>
             <th style="width: 12rem">Action</th>
         </tr>

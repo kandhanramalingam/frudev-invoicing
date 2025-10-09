@@ -17,7 +17,7 @@
 <p-table [value]="rows" [loading]="loading" [paginator]="rows.length > 0" [rows]="rowsPerPage" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
     <ng-template pTemplate="header">
         <tr>
-            <th>Name</th>
+            <th>Name <i class="fa fa-filter text-gray-400 ml-1"></i></th>
             <th style="width: 10rem">Bid No</th>
             <th style="width: 10rem">Value Allocated</th>
             <th style="width: 10rem">Status</th>
