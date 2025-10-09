@@ -30,4 +30,13 @@ export const routes: Routes = [
             { path: "species-categories", loadComponent: () => import("./pages/species/species-categories/species-categories").then(m => m.SpeciesCategories) }
         ]
     },
+    {
+        path: "clients",
+        loadComponent: () => import("./pages/clients/clients").then(m => m.Clients),
+        resolve: { db: DbInitResolver },
+        children: [
+            { path: "", redirectTo: "clients-list", pathMatch: "full" },
+            { path: "clients-list", loadComponent: () => import("./pages/clients/clients-list/clients-list").then(m => m.ClientsList) }
+        ]
+    },
 ];
