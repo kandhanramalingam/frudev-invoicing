@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
-import { InputTextarea } from 'primeng/inputtextarea';
+import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { Drawer } from 'primeng/drawer';
 import { Menu } from 'primeng/menu';
@@ -18,7 +18,7 @@ import { Client } from '../../../interfaces/client.interface';
 
 @Component({
   selector: 'app-clients-list',
-  imports: [TableModule, Button, InputText, InputTextarea, Select, Drawer, Menu, ConfirmDialog, FormsModule, HeaderComponent, NgClass, Ripple],
+  imports: [TableModule, Button, InputText, Textarea, Select, Drawer, Menu, ConfirmDialog, FormsModule, HeaderComponent, NgClass, Ripple],
   providers: [ConfirmationService],
   templateUrl: './clients-list.html',
   styleUrl: './clients-list.scss'
@@ -26,10 +26,14 @@ import { Client } from '../../../interfaces/client.interface';
 export class ClientsList implements OnInit {
   clients: Client[] = [];
   loading = false;
+  totalRecords = 0;
+  rowsPerPage = 10;
+  currentPage = 0;
   drawerVisible = false;
   editMode = false;
   currentClient: Client = { firstName: '', lastName: '', email: '', address: '', mobile: '', status: 'Y' };
   selectedClient: Client | null = null;
+  searchTerm = '';
   statusOptions = [
     { label: 'Active', value: 'Y' },
     { label: 'Inactive', value: 'N' }
@@ -48,13 +52,24 @@ export class ClientsList implements OnInit {
   async loadData() {
     this.loading = true;
     try {
-      this.clients = await this.clientService.getClients();
+      const result = await this.clientService.getClients(this.searchTerm, {
+        page: this.currentPage,
+        size: this.rowsPerPage
+      });
+      this.clients = result.data;
+      this.totalRecords = result.totalRecords;
     } catch (error) {
       console.log(error);
       this.toastService.showError('Failed to load data');
     } finally {
       this.loading = false;
     }
+  }
+
+  onPageChange(event: any) {
+    this.currentPage = event.first / event.rows;
+    this.rowsPerPage = event.rows;
+    this.loadData();
   }
 
   openDrawer(client?: Client) {

@@ -24,10 +24,14 @@ import { SpeciesCategory } from '../../../interfaces/species.interface';
 export class SpeciesCategories implements OnInit {
   categories: SpeciesCategory[] = [];
   loading = false;
+  totalRecords = 0;
+  rowsPerPage = 10;
+  currentPage = 0;
   drawerVisible = false;
   editMode = false;
   currentCategory: SpeciesCategory = { name: '' };
   selectedCategory: SpeciesCategory | null = null;
+  searchTerm = '';
 
   constructor(
     private speciesService: SpeciesService,
@@ -42,12 +46,23 @@ export class SpeciesCategories implements OnInit {
   async loadData() {
     this.loading = true;
     try {
-      this.categories = await this.speciesService.getCategories();
+      const result = await this.speciesService.getCategories(this.searchTerm, {
+        page: this.currentPage,
+        size: this.rowsPerPage
+      });
+      this.categories = result.data;
+      this.totalRecords = result.totalRecords;
     } catch (error) {
       this.toastService.showError('Failed to load categories');
     } finally {
       this.loading = false;
     }
+  }
+
+  onPageChange(event: any) {
+    this.currentPage = event.first / event.rows;
+    this.rowsPerPage = event.rows;
+    this.loadData();
   }
 
   openDrawer(category?: SpeciesCategory) {

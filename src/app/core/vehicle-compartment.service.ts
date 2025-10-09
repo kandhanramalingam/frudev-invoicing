@@ -1,23 +1,43 @@
 import { Injectable } from '@angular/core';
 import { DbService } from './db.service';
 import { VehicleCompartment } from '../interfaces/vehicle-compartment.interface';
+import { PaginationRequest, PaginationResponse } from '../interfaces/pagination.interface';
 
 @Injectable({ providedIn: 'root' })
 export class VehicleCompartmentService {
   constructor(private db: DbService) {}
 
-  async getAll(search?: string): Promise<VehicleCompartment[]> {
+  async getAll(search?: string, pagination?: PaginationRequest): Promise<PaginationResponse<VehicleCompartment>> {
     try {
-      let sql = 'SELECT id, name, size FROM wld_vehicle_compartments';
       const params: any[] = [];
+      let whereClause = '';
       
       if (search) {
-        sql += ' WHERE name LIKE ?';
+        whereClause = ' WHERE name LIKE ?';
         params.push(`%${search}%`);
       }
       
-      sql += ' ORDER BY name';
-      return await this.db.query<VehicleCompartment>(sql, params);
+      // Get total count
+      const countSql = `SELECT COUNT(*) as count FROM wld_vehicle_compartments${whereClause}`;
+      const countResult = await this.db.query<{count: number}>(countSql, params);
+      const totalRecords = countResult[0]?.count || 0;
+      
+      // Get paginated data
+      let sql = `SELECT id, name, size FROM wld_vehicle_compartments${whereClause} ORDER BY name`;
+      
+      if (pagination) {
+        const offset = pagination.page * pagination.size;
+        sql += ` LIMIT ${pagination.size} OFFSET ${offset}`;
+      }
+      
+      const data = await this.db.query<VehicleCompartment>(sql, params);
+      
+      return {
+        data,
+        totalRecords,
+        page: pagination?.page || 0,
+        size: pagination?.size || data.length
+      };
     } catch (error) {
       throw new Error('Failed to load vehicle compartments');
     }

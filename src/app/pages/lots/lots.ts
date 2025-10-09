@@ -32,7 +32,9 @@ export class AuctionLots implements OnInit {
     rows: LotListItem[] = [];
     loading = false;
     loadingAuctions = false;
+    totalRecords = 0;
     rowsPerPage = 10;
+    currentPage = 0;
     showInvoiceView = false;
     invoiceConfig: InvoiceConfigs | null = null;
     invoiceLotDetails: InvoiceLotDetail[] = [];
@@ -61,14 +63,26 @@ export class AuctionLots implements OnInit {
     async load() {
         if (!this.selectedAuctionId) {
             this.rows = [];
+            this.totalRecords = 0;
             return;
         }
         this.loading = true;
         try {
-            this.rows = await this.lotSvc.getLots(this.selectedAuctionId, this.searchLot);
+            const result = await this.lotSvc.getLots(this.selectedAuctionId, this.searchLot, {
+                page: this.currentPage,
+                size: this.rowsPerPage
+            });
+            this.rows = result.data;
+            this.totalRecords = result.totalRecords;
         } finally {
             this.loading = false;
         }
+    }
+
+    onPageChange(event: any) {
+        this.currentPage = event.first / event.rows;
+        this.rowsPerPage = event.rows;
+        this.load();
     }
 
     showInvoice(lot: LotListItem) {

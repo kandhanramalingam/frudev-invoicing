@@ -23,6 +23,9 @@ import { NgClass } from '@angular/common';
 export class VehicleCategories implements OnInit {
   vehicleCategories: VehicleCategory[] = [];
   loading = false;
+  totalRecords = 0;
+  rowsPerPage = 10;
+  currentPage = 0;
   drawerVisible = false;
   newVehicleCategoryName = '';
   saving = false;
@@ -47,12 +50,23 @@ export class VehicleCategories implements OnInit {
   async load() {
     this.loading = true;
     try {
-      this.vehicleCategories = await this.vehicleCategoryService.getAll(this.searchTerm || undefined);
+      const result = await this.vehicleCategoryService.getAll(this.searchTerm || undefined, {
+        page: this.currentPage,
+        size: this.rowsPerPage
+      });
+      this.vehicleCategories = result.data;
+      this.totalRecords = result.totalRecords;
     } catch (error) {
       this.toastService.showError('Failed to load vehicle categories');
     } finally {
       this.loading = false;
     }
+  }
+
+  onPageChange(event: any) {
+    this.currentPage = event.first / event.rows;
+    this.rowsPerPage = event.rows;
+    this.load();
   }
 
   openDrawer() {

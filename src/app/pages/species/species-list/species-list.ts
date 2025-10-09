@@ -26,10 +26,14 @@ export class SpeciesList implements OnInit {
   species: Species[] = [];
   categories: SpeciesCategory[] = [];
   loading = false;
+  totalRecords = 0;
+  rowsPerPage = 10;
+  currentPage = 0;
   drawerVisible = false;
   editMode = false;
   currentSpecies: Species = { engName: '', afcName: '', status: 'Y' };
   selectedSpecies: Species | null = null;
+  searchTerm = '';
   statusOptions = [
     { label: 'Active', value: 'Y' },
     { label: 'Inactive', value: 'N' }
@@ -48,16 +52,28 @@ export class SpeciesList implements OnInit {
   async loadData() {
     this.loading = true;
     try {
-      [this.species, this.categories] = await Promise.all([
-        this.speciesService.getSpecies(),
-        this.speciesService.getCategories()
+      const [speciesResult, categories] = await Promise.all([
+        this.speciesService.getSpecies(this.searchTerm, {
+          page: this.currentPage,
+          size: this.rowsPerPage
+        }),
+        this.speciesService.getCategories().then(result => Array.isArray(result) ? result : result.data)
       ]);
+      this.species = speciesResult.data;
+      this.totalRecords = speciesResult.totalRecords;
+      this.categories = categories;
     } catch (error) {
         console.log(error)
       this.toastService.showError('Failed to load data');
     } finally {
       this.loading = false;
     }
+  }
+
+  onPageChange(event: any) {
+    this.currentPage = event.first / event.rows;
+    this.rowsPerPage = event.rows;
+    this.loadData();
   }
 
   openDrawer(species?: Species) {

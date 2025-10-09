@@ -1,5 +1,9 @@
 <app-header title="">
     <div actions class="flex gap-2 items-end">
+        <div class="flex flex-col">
+            <label class="text-xs mb-1">Search</label>
+            <input pInputText type="text" [(ngModel)]="searchTerm" (keyup.enter)="loadData()" placeholder="Search clients" />
+        </div>
         <p-button
                 size="small"
                 label="Add Client"
@@ -13,7 +17,10 @@
         [value]="clients"
         [loading]="loading"
         [paginator]="true"
-        [rows]="10"
+        [rows]="rowsPerPage"
+        [totalRecords]="totalRecords"
+        [lazy]="true"
+        (onLazyLoad)="onPageChange($event)"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
 
@@ -84,7 +91,7 @@
 
     <div>
       <label class="block text-sm font-medium mb-2">Address</label>
-      <textarea pInputTextarea [(ngModel)]="currentClient.address" placeholder="Enter address" class="w-full" rows="3"></textarea>
+      <textarea pTextarea [(ngModel)]="currentClient.address" placeholder="Enter address" class="w-full" rows="3"></textarea>
     </div>
 
     <div>

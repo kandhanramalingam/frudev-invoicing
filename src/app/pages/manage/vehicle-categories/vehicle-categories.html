@@ -8,7 +8,7 @@
   </div>
 </app-header>
 
-<p-table [value]="vehicleCategories" [loading]="loading" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+<p-table [value]="vehicleCategories" [loading]="loading" [paginator]="true" [rows]="rowsPerPage" [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="onPageChange($event)" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
   <ng-template pTemplate="header">
     <tr>
       <th>Name</th>

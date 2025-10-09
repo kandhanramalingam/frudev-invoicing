@@ -18,7 +18,9 @@ import {ToastService} from "../../core/toast.service";
 export class Auctions implements OnInit {
   rows: Auction[] = [];
   loading = false;
+  totalRecords = 0;
   rowsPerPage = 10;
+  currentPage = 0;
 
   filterDate: string | null = null; // yyyy-mm-dd
   search: string = '';
@@ -32,12 +34,23 @@ export class Auctions implements OnInit {
   async load() {
     this.loading = true;
     try {
-      this.rows = await this.svc.getAuctions(this.filterDate, this.search);
+      const result = await this.svc.getAuctions(this.filterDate, this.search, {
+        page: this.currentPage,
+        size: this.rowsPerPage
+      });
+      this.rows = result.data;
+      this.totalRecords = result.totalRecords;
     } catch (err) {
       console.log(err);
       this.toastService.showError('Failed to load auctions');
     } finally {
       this.loading = false;
     }
+  }
+
+  onPageChange(event: any) {
+    this.currentPage = event.first / event.rows;
+    this.rowsPerPage = event.rows;
+    this.load();
   }
 }

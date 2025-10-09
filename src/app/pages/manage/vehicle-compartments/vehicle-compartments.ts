@@ -23,6 +23,9 @@ import { NgClass } from '@angular/common';
 export class VehicleCompartments implements OnInit {
   vehicleCompartments: VehicleCompartment[] = [];
   loading = false;
+  totalRecords = 0;
+  rowsPerPage = 10;
+  currentPage = 0;
   drawerVisible = false;
   newVehicleCompartmentName = '';
   newVehicleCompartmentSize = '';
@@ -48,12 +51,23 @@ export class VehicleCompartments implements OnInit {
   async load() {
     this.loading = true;
     try {
-      this.vehicleCompartments = await this.vehicleCompartmentService.getAll(this.searchTerm || undefined);
+      const result = await this.vehicleCompartmentService.getAll(this.searchTerm || undefined, {
+        page: this.currentPage,
+        size: this.rowsPerPage
+      });
+      this.vehicleCompartments = result.data;
+      this.totalRecords = result.totalRecords;
     } catch (error) {
       this.toastService.showError('Failed to load vehicle compartments');
     } finally {
       this.loading = false;
     }
+  }
+
+  onPageChange(event: any) {
+    this.currentPage = event.first / event.rows;
+    this.rowsPerPage = event.rows;
+    this.load();
   }
 
   openDrawer() {

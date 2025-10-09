@@ -1,33 +1,53 @@
 import { Injectable } from '@angular/core';
 import { DbService } from './db.service';
 import { Vehicle, VehicleCompartmentDetail } from '../interfaces/vehicle.interface';
+import { PaginationRequest, PaginationResponse } from '../interfaces/pagination.interface';
 
 @Injectable({ providedIn: 'root' })
 export class VehicleService {
   constructor(private db: DbService) {}
 
-  async getAll(search?: string): Promise<Vehicle[]> {
+  async getAll(search?: string, pagination?: PaginationRequest): Promise<PaginationResponse<Vehicle>> {
     try {
-      let sql = `SELECT v.*, 
-        GROUP_CONCAT(CONCAT(vc.name, ' (', vcd.quantity, ')') SEPARATOR ', ') as compartments_display
-        FROM wld_vehicles v
-        LEFT JOIN wld_vehicle_compartment_details vcd ON v.id = vcd.vehicle_id
-        LEFT JOIN wld_vehicle_compartments vc ON vcd.compartment_id = vc.id`;
       const params: any[] = [];
+      let whereClause = '';
       
       if (search) {
-        sql += ' WHERE v.make LIKE ? OR v.code LIKE ? OR v.registrationNumber LIKE ?';
+        whereClause = ' WHERE v.make LIKE ? OR v.code LIKE ? OR v.registrationNumber LIKE ?';
         const searchParam = `%${search}%`;
         params.push(searchParam, searchParam, searchParam);
       }
       
-      sql += ' GROUP BY v.id ORDER BY v.make';
-      const vehicles = await this.db.query<any>(sql, params);
+      // Get total count
+      const countSql = `SELECT COUNT(DISTINCT v.id) as count FROM wld_vehicles v${whereClause}`;
+      const countResult = await this.db.query<{count: number}>(countSql, params);
+      const totalRecords = countResult[0]?.count || 0;
       
-      return vehicles.map(v => ({
+      // Get paginated data
+      let sql = `SELECT v.*, 
+        GROUP_CONCAT(CONCAT(vc.name, ' (', vcd.quantity, ')') SEPARATOR ', ') as compartments_display
+        FROM wld_vehicles v
+        LEFT JOIN wld_vehicle_compartment_details vcd ON v.id = vcd.vehicle_id
+        LEFT JOIN wld_vehicle_compartments vc ON vcd.compartment_id = vc.id${whereClause}
+        GROUP BY v.id ORDER BY v.make`;
+      
+      if (pagination) {
+        const offset = pagination.page * pagination.size;
+        sql += ` LIMIT ${pagination.size} OFFSET ${offset}`;
+      }
+      
+      const vehicles = await this.db.query<any>(sql, params);
+      const data = vehicles.map(v => ({
         ...v,
         compartments_display: v.compartments_display || 'No compartments'
       }));
+      
+      return {
+        data,
+        totalRecords,
+        page: pagination?.page || 0,
+        size: pagination?.size || data.length
+      };
     } catch (error) {
       throw new Error('Failed to load vehicles');
     }

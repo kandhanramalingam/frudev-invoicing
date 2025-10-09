@@ -1,5 +1,9 @@
 <app-header title="">
     <div actions class="flex gap-2 items-end">
+        <div class="flex flex-col">
+            <label class="text-xs mb-1">Search</label>
+            <input pInputText type="text" [(ngModel)]="searchTerm" (keyup.enter)="loadData()" placeholder="Search categories" />
+        </div>
         <p-button
                 size="small"
                 label="Add Category"
@@ -14,7 +18,10 @@
         [value]="categories"
         [loading]="loading"
         [paginator]="true"
-        [rows]="10"
+        [rows]="rowsPerPage"
+        [totalRecords]="totalRecords"
+        [lazy]="true"
+        (onLazyLoad)="onPageChange($event)"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         styleClass="p-datatable-sm">

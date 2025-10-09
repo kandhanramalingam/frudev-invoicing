@@ -24,6 +24,9 @@ import {Ripple} from "primeng/ripple";
 export class Vehicles implements OnInit {
   vehicles: Vehicle[] = [];
   loading = false;
+  totalRecords = 0;
+  rowsPerPage = 10;
+  currentPage = 0;
   selectedVehicle: Vehicle | null = null;
   searchTerm = '';
   drawerVisible = false;
@@ -85,13 +88,23 @@ export class Vehicles implements OnInit {
   async load() {
     this.loading = true;
     try {
-      this.vehicles = await this.vehicleService.getAll(this.searchTerm || undefined);
-        console.log(this.vehicles)
+      const result = await this.vehicleService.getAll(this.searchTerm || undefined, {
+        page: this.currentPage,
+        size: this.rowsPerPage
+      });
+      this.vehicles = result.data;
+      this.totalRecords = result.totalRecords;
     } catch (error) {
       this.toastService.showError('Failed to load vehicles');
     } finally {
       this.loading = false;
     }
+  }
+
+  onPageChange(event: any) {
+    this.currentPage = event.first / event.rows;
+    this.rowsPerPage = event.rows;
+    this.load();
   }
 
   confirmStatusChange(vehicle: Vehicle) {
@@ -181,8 +194,8 @@ export class Vehicles implements OnInit {
       } else {
         await this.vehicleService.create(this.vehicleForm);
         // Get the newly created vehicle ID (simplified - in real app you'd return it from create)
-        const vehicles = await this.vehicleService.getAll();
-        vehicleId = vehicles[0].id; // This is a simplification
+        const result = await this.vehicleService.getAll();
+        vehicleId = result.data[0].id; // This is a simplification
         this.toastService.showSuccess('Vehicle added successfully');
       }
       

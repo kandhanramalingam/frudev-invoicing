@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {DbService} from './db.service';
 import {InvoiceConfig} from "./invoice.service";
 import {InvoiceConfigs, InvoiceResponse, LotListItem} from "../interfaces/lot-response.interface";
+import { PaginationRequest, PaginationResponse } from '../interfaces/pagination.interface';
 
 @Injectable({providedIn: 'root'})
 export class LotService {
@@ -12,7 +13,7 @@ export class LotService {
         await this.db.init();
     }
 
-    async getLots(auctionId?: number | null, search?: string | null): Promise<LotListItem[]> {
+    async getLots(auctionId?: number | null, search?: string | null, pagination?: PaginationRequest): Promise<PaginationResponse<LotListItem>> {
         await this.init();
         const params: any[] = [];
         const where: string[] = [];
@@ -28,30 +29,55 @@ export class LotService {
         }
 
         const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
-        const limit = 'LIMIT 1000';
-
-        return this.db.query<LotListItem>(`SELECT wld_lotset.id,
-                                                  wld_lotset.mainlotno,
-                                                  wld_lotset.description,
-                                                  wld_lotset.price,
-                                                  wld_lotset.sum_total,
-                                                  wld_lotset.VMStatus,
-                                                  COALESCE(wld_users.firstName, 
-                                                          CASE WHEN wld_user_auctions.user_id REGEXP '^[0-9]+$' 
-                                                               THEN NULL 
-                                                               ELSE wld_user_auctions.user_id 
-                                                          END) as firstName,
-                                                  COALESCE(wld_users.lastName, '') as lastName,
-                                                  wld_lotset.userid,
-                                                  wld_lotset.auction_id
-                                           FROM wld_lotset
-                                                    LEFT JOIN wld_user_auctions ON wld_lotset.wla_lotno = wld_user_auctions.game_id
-                                                    LEFT JOIN wld_users ON CASE WHEN wld_user_auctions.user_id REGEXP '^[0-9]+$' 
-                                                                                THEN wld_user_auctions.user_id = wld_users.id 
-                                                                                ELSE FALSE 
-                                                                           END
-                                               ${whereSql}
-                                           ORDER BY mainlotno ASC ${limit}`, params);
+        
+        // Get total count
+        const countSql = `SELECT COUNT(*) as count FROM wld_lotset
+                         LEFT JOIN wld_user_auctions ON wld_lotset.wla_lotno = wld_user_auctions.game_id
+                         LEFT JOIN wld_users ON CASE WHEN wld_user_auctions.user_id REGEXP '^[0-9]+$' 
+                                                     THEN wld_user_auctions.user_id = wld_users.id 
+                                                     ELSE FALSE 
+                                                END
+                         ${whereSql}`;
+        const countResult = await this.db.query<{count: number}>(countSql, params);
+        const totalRecords = countResult[0]?.count || 0;
+        
+        // Get paginated data
+        let sql = `SELECT wld_lotset.id,
+                          wld_lotset.mainlotno,
+                          wld_lotset.description,
+                          wld_lotset.price,
+                          wld_lotset.sum_total,
+                          wld_lotset.VMStatus,
+                          COALESCE(wld_users.firstName, 
+                                  CASE WHEN wld_user_auctions.user_id REGEXP '^[0-9]+$' 
+                                       THEN NULL 
+                                       ELSE wld_user_auctions.user_id 
+                                  END) as firstName,
+                          COALESCE(wld_users.lastName, '') as lastName,
+                          wld_lotset.userid,
+                          wld_lotset.auction_id
+                   FROM wld_lotset
+                        LEFT JOIN wld_user_auctions ON wld_lotset.wla_lotno = wld_user_auctions.game_id
+                        LEFT JOIN wld_users ON CASE WHEN wld_user_auctions.user_id REGEXP '^[0-9]+$' 
+                                                    THEN wld_user_auctions.user_id = wld_users.id 
+                                                    ELSE FALSE 
+                                               END
+                   ${whereSql}
+                   ORDER BY mainlotno ASC`;
+        
+        if (pagination) {
+            const offset = pagination.page * pagination.size;
+            sql += ` LIMIT ${pagination.size} OFFSET ${offset}`;
+        }
+        
+        const data = await this.db.query<LotListItem>(sql, params);
+        
+        return {
+            data,
+            totalRecords,
+            page: pagination?.page || 0,
+            size: pagination?.size || data.length
+        };
     }
 
     async getInvoiceDetailsFromLot(lot: LotListItem): Promise<InvoiceResponse> {
