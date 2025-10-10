@@ -52,5 +52,17 @@ CREATE TABLE wld_species_categories (
     name VARCHAR(255) NOT NULL
 );
 
-alter table wld_species add column  category_id int(11) default NULL after  status;
+ALTER TABLE wld_species ADD COLUMN category_id INT(11) DEFAULT NULL AFTER status;
+
+CREATE TABLE wld_quote_validity (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    days INT(11) NOT NULL
+);
+
+CREATE TABLE wld_quote_terrain (
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   name VARCHAR(255) NOT NULL,
+   value INT(11) NOT NULL,
+   animal_per_day INT(11) NOT NULL
+);
 ```

@@ -1,0 +1,74 @@
+<app-header title="">
+  <div actions class="flex gap-2 items-end">
+    <div class="flex flex-col">
+      <label class="text-xs mb-1">Search</label>
+      <input pInputText [(ngModel)]="searchTerm" (keyup.enter)="load()" placeholder="Search days" class="text-sm" />
+    </div>
+    <p-button label="Add Quote Validity" size="small" (click)="openDrawer()"></p-button>
+  </div>
+</app-header>
+
+<p-table [value]="quoteValidities" [loading]="loading" [paginator]="true" [rows]="rowsPerPage" [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="onPageChange($event)" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Days <i class="fa fa-filter text-gray-400 ml-1"></i></th>
+      <th style="width: 8rem">Action</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-validity>
+    <tr>
+      <td>{{ validity.days }} days</td>
+      <td>
+        <button 
+          class="p-2 hover:bg-gray-100 rounded-full"
+          (click)="selectedValidity = validity; menu.toggle($event)">
+          <i class="fa fa-ellipsis-v text-gray-500"></i>
+        </button>
+        <p-menu [model]="actionMenus" appendTo="body" #menu [popup]="true">
+          <ng-template pTemplate="item" let-item>
+              <a pRipple class="flex items-center p-menu-item-link">
+                  <span [class]="item.icon" [ngClass]="item.styleClass"></span>
+                  <span class="ml-2" [ngClass]="item.styleClass">{{ item.label }}</span>
+              </a>
+          </ng-template>
+        </p-menu>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="2">{{ searchTerm ? 'No matching quote validity found' : 'No quote validity found' }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-drawer [(visible)]="drawerVisible" [header]="editingValidity ? 'Edit Quote Validity' : 'Add Quote Validity'" position="right" (onHide)="clearValidations()">
+  <div class="space-y-4">
+    <div>
+      <label class="block text-sm font-medium mb-2">Days <span class="text-red-500">*</span></label>
+      <input 
+        pInputText 
+        type="number"
+        [(ngModel)]="newValidityDays" 
+        placeholder="Enter number of days"
+        class="w-full" 
+        required />
+    </div>
+    
+    <div class="flex gap-2 pt-4">
+      <p-button 
+        [label]="editingValidity ? 'Update' : 'Save'" 
+        (click)="saveValidity()" 
+        [loading]="saving"
+        [disabled]="!newValidityDays || newValidityDays <= 0"
+        size="small"></p-button>
+      <p-button 
+        label="Cancel" 
+        severity="secondary" 
+        (click)="drawerVisible = false"
+        size="small"></p-button>
+    </div>
+  </div>
+</p-drawer>
+
+<p-confirmDialog></p-confirmDialog>

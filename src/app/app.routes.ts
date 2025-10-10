@@ -39,4 +39,23 @@ export const routes: Routes = [
             { path: "clients-list", loadComponent: () => import("./pages/clients/clients-list/clients-list").then(m => m.ClientsList) }
         ]
     },
+    {
+        path: "quote-config",
+        loadComponent: () => import("./pages/quote-config/quote-config").then(m => m.QuoteConfig),
+        resolve: { db: DbInitResolver },
+        children: [
+            { path: "", redirectTo: "quote-validity", pathMatch: "full" },
+            { path: "quote-validity", loadComponent: () => import("./pages/quote-config/quote-validity/quote-validity").then(m => m.QuoteValidityComponent) },
+            { path: "quote-terrain", loadComponent: () => import("./pages/quote-config/quote-terrain/quote-terrain").then(m => m.QuoteTerrainComponent) }
+        ]
+    },
+    {
+        path: "quote",
+        loadComponent: () => import("./pages/quote/quote").then(m => m.Quote),
+        resolve: { db: DbInitResolver },
+        children: [
+            { path: "", redirectTo: "quote-wrapper", pathMatch: "full" },
+            { path: "quote-wrapper", loadComponent: () => import("./pages/quote/quote-wrapper/quote-wrapper").then(m => m.QuoteWrapperComponent) }
+        ]
+    },
 ];

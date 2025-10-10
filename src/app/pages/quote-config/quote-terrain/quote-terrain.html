@@ -1,0 +1,99 @@
+<app-header title="">
+  <div actions class="flex gap-2 items-end">
+    <div class="flex flex-col">
+      <label class="text-xs mb-1">Search</label>
+      <input pInputText [(ngModel)]="searchTerm" (keyup.enter)="search()" placeholder="Search terrain" class="text-sm" />
+    </div>
+    <p-button label="Add Terrain" size="small" (click)="openDrawer()"></p-button>
+  </div>
+</app-header>
+
+<p-table [value]="terrains" [loading]="loading" [paginator]="true" [rows]="rowsPerPage" [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="onPageChange($event)" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Name <i class="fa fa-filter text-gray-400 ml-1"></i></th>
+      <th>Value <i class="fa fa-filter text-gray-400 ml-1"></i></th>
+      <th>Animal Per Day</th>
+      <th style="width: 8rem">Action</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-terrain>
+    <tr>
+      <td>{{ terrain.name }}</td>
+      <td>{{ terrain.value }}</td>
+      <td>{{ terrain.animal_per_day }}</td>
+      <td>
+        <button 
+          class="p-2 hover:bg-gray-100 rounded-full"
+          (click)="selectedTerrain = terrain; menu.toggle($event)">
+          <i class="fa fa-ellipsis-v text-gray-500"></i>
+        </button>
+        <p-menu [model]="actionMenus" appendTo="body" #menu [popup]="true">
+          <ng-template pTemplate="item" let-item>
+              <a pRipple class="flex items-center p-menu-item-link">
+                  <span [class]="item.icon" [ngClass]="item.styleClass"></span>
+                  <span class="ml-2" [ngClass]="item.styleClass">{{ item.label }}</span>
+              </a>
+          </ng-template>
+        </p-menu>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="4">{{ searchTerm ? 'No matching terrain found' : 'No terrain found' }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-drawer [(visible)]="drawerVisible" [header]="editingTerrain ? 'Edit Terrain' : 'Add Terrain'" position="right" (onHide)="clearValidations()">
+  <div class="space-y-4">
+    <div>
+      <label class="block text-sm font-medium mb-2">Name <span class="text-red-500">*</span></label>
+      <input 
+        pInputText 
+        [(ngModel)]="terrainForm.name" 
+        placeholder="Enter terrain name"
+        class="w-full" 
+        required />
+    </div>
+    
+    <div>
+      <label class="block text-sm font-medium mb-2">Value <span class="text-red-500">*</span></label>
+      <input 
+        pInputText 
+        type="number"
+        [(ngModel)]="terrainForm.value" 
+        placeholder="Enter value"
+        class="w-full" 
+        required />
+    </div>
+    
+    <div>
+      <label class="block text-sm font-medium mb-2">Animal Per Day <span class="text-red-500">*</span></label>
+      <input 
+        pInputText 
+        type="number"
+        [(ngModel)]="terrainForm.animal_per_day" 
+        placeholder="Enter animals per day"
+        class="w-full" 
+        required />
+    </div>
+    
+    <div class="flex gap-2 pt-4">
+      <p-button 
+        [label]="editingTerrain ? 'Update' : 'Save'" 
+        (click)="saveTerrain()" 
+        [loading]="saving"
+        [disabled]="!isFormValid()"
+        size="small"></p-button>
+      <p-button 
+        label="Cancel" 
+        severity="secondary" 
+        (click)="drawerVisible = false"
+        size="small"></p-button>
+    </div>
+  </div>
+</p-drawer>
+
+<p-confirmDialog></p-confirmDialog>
