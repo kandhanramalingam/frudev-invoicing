@@ -156,4 +156,19 @@ export class LotService {
             throw error;
         }
     }
+
+    async getSpeciesFromLot(lotId: number) {
+        await this.init();
+        try {
+            return this.db.query<any>(`
+                SELECT s.id, s.engName, sl.total as quantity
+                FROM wld_sublot sl
+                JOIN wld_species s ON sl.game_species = s.id
+                WHERE sl.lot_id = ?
+            `, [lotId]);
+        } catch (error) {
+            console.error('Error getting species from lot:', error);
+            throw error;
+        }
+    }
 }

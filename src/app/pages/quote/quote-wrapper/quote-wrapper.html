@@ -1,4 +1,83 @@
 <div class="p-4">
   <h2 class="text-xl font-semibold mb-4">Quote Wrapper</h2>
-  <p class="text-gray-600">Quote wrapper component - coming soon...</p>
+  
+  <form [formGroup]="quoteForm" class="grid grid-cols-1 gap-4">
+    <div class="field">
+      <label for="quoteValidity">Quote Validity</label>
+      <p-select 
+        id="quoteValidity"
+        formControlName="quoteValidity"
+        [options]="quoteValidities" 
+        optionLabel="days" 
+        placeholder="Select validity period"
+        class="w-full">
+        <ng-template pTemplate="selectedItem">
+          @if (quoteForm.get('quoteValidity')?.value) {
+            <span>{{quoteForm.get('quoteValidity')?.value.days}} days</span>
+          }
+        </ng-template>
+        <ng-template pTemplate="item" let-validity>
+          <span>{{validity.days}} days</span>
+        </ng-template>
+      </p-select>
+    </div>
+    
+    <div class="field">
+      <label for="farmSize">Size of Farm (in Hectares)</label>
+      <p-inputnumber 
+        id="farmSize"
+        formControlName="farmSize" 
+        placeholder="Enter farm size"
+        class="w-full">
+      </p-inputnumber>
+    </div>
+
+    <div class="field" style="max-width: 60%">
+      <div class="flex justify-between items-center mb-2">
+        <label>Species</label>
+        <div class="text-right">
+            <p-button
+                    icon="fa fa-plus"
+                    size="small"
+                    (onClick)="addSpeciesRow()"
+                    pTooltip="Add Species">
+            </p-button>
+        </div>
+      </div>
+      
+      <div formArrayName="species" class="space-y-2">
+        @for (speciesControl of speciesArray.controls; track $index) {
+          <div [formGroupName]="$index" class="flex gap-2 items-end">
+            <div class="flex-1">
+              <p-select 
+                formControlName="speciesId"
+                [options]="allSpecies" 
+                optionLabel="engName" 
+                optionValue="id"
+                placeholder="Select Species"
+                appendTo="body"
+                class="w-full">
+              </p-select>
+            </div>
+            <div style="width: 100px;">
+              <p-inputnumber 
+                formControlName="quantity" 
+                placeholder="Quantity"
+                class="w-full">
+              </p-inputnumber>
+            </div>
+            @if (speciesArray.length > 1) {
+              <p-button 
+                icon="fa fa-trash" 
+                severity="danger" 
+                size="small" 
+                (onClick)="removeSpeciesRow($index)" 
+                pTooltip="Remove">
+              </p-button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </form>
 </div>

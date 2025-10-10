@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {Select} from 'primeng/select';
 import {InputText} from 'primeng/inputtext';
 import {Button} from 'primeng/button';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HeaderComponent} from "../../shared/header/header";
 import {AuctionService} from "../../core/auction.service";
 import {LotService} from "../../core/lot.service";
@@ -42,7 +42,7 @@ export class AuctionLots implements OnInit {
     @ViewChild(SampleInvoice) sampleInvoiceComponent!: SampleInvoice;
 
 
-    constructor(private auctionSvc: AuctionService, private lotSvc: LotService, private route: ActivatedRoute, private toastService: ToastService, private confirmationService: ConfirmationService) {
+    constructor(private auctionSvc: AuctionService, private lotSvc: LotService, private route: ActivatedRoute, private router: Router, private toastService: ToastService, private confirmationService: ConfirmationService) {
     }
 
     async ngOnInit() {
@@ -125,6 +125,12 @@ export class AuctionLots implements OnInit {
         } else {
             window.print();
         }
+    }
+
+    createQuote(lot: LotListItem) {
+        this.router.navigate(['/quote/quote-wrapper'], {
+            queryParams: { lotId: lot.id }
+        });
     }
 
     @HostListener('document:keydown.escape')

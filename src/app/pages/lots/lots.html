@@ -49,7 +49,10 @@
                     {{row.firstName}} {{row.lastName}}
                 </td>
                 <td>
-                    <p-button icon="fa fa-file-invoice-dollar" pTooltip="Create Invoice" tooltipPosition="left" size="small" (onClick)="showInvoice(row)"></p-button>
+                    <div class="flex gap-1">
+                        <p-button icon="fa fa-file-invoice-dollar" pTooltip="Create Invoice" tooltipPosition="left" size="small" (onClick)="showInvoice(row)"></p-button>
+                        <p-button icon="fa fa-quote-right" pTooltip="Create Quote" tooltipPosition="left" size="small" (onClick)="createQuote(row)"></p-button>
+                    </div>
                 </td>
             </tr>
         </ng-template>
