@@ -3,4 +3,6 @@ export interface Buyer {
     bidno: number
     firstName: string
     lastName: string
+    buyer_id: string
+    value_allowed: number
 }

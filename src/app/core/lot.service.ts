@@ -171,4 +171,23 @@ export class LotService {
             throw error;
         }
     }
+
+    async getBuyerLots(buyerId: string, auctionId: number) {
+        await this.init();
+        try {
+            return this.db.query<any>(`
+                SELECT l.id, l.mainlotno, l.description, l.sum_total,
+                       ua.auction_price, ua.total_auction_price
+                FROM wld_user_auctions ua
+                JOIN wld_lotset l ON ua.auction_id = l.auction_id AND ua.game_id = l.wla_lotno
+                WHERE ua.user_id = ? AND ua.auction_id = ?
+                ORDER BY l.mainlotno ASC
+            `, [buyerId, auctionId]);
+        } catch (error) {
+            console.error('Error getting buyer lots:', error);
+            throw error;
+        }
+    }
+
+
 }

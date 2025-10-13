@@ -65,4 +65,19 @@ CREATE TABLE wld_quote_terrain (
    value INT(11) NOT NULL,
    animal_per_day INT(11) NOT NULL
 );
+
+CREATE TABLE wld_generated_invoices (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    invoice_number VARCHAR(50) NOT NULL UNIQUE,
+    auction_id INT NOT NULL,
+    buyer_id VARCHAR(50) NOT NULL,
+    lot_numbers TEXT NOT NULL,
+    total_amount DECIMAL(10,2) NOT NULL,
+    invoice_file LONGBLOB NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    file_type VARCHAR(50) DEFAULT 'application/pdf',
+    status ENUM('Pending', 'Paid', 'Cancelled') DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 ```

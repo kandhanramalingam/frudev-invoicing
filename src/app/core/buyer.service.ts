@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DbService } from './db.service';
 import {Buyer} from "../interfaces/buyer.interface";
+import { PaginationRequest, PaginationResponse } from '../interfaces/pagination.interface';
 
 @Injectable({ providedIn: 'root' })
 export class BuyerService {
@@ -8,7 +9,7 @@ export class BuyerService {
 
   private async init() { await this.db.init(); }
 
-  async getBuyers(auctionId?: number | null, search?: string | null): Promise<Buyer[]> {
+  async getBuyers(auctionId?: number | null, search?: string | null, pagination?: PaginationRequest): Promise<PaginationResponse<Buyer>> {
     await this.init();
     const params: any[] = [];
     const where: string[] = [];
@@ -25,12 +26,33 @@ export class BuyerService {
     }
     
     const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
-    const orderBy = 'ORDER BY bidno ASC';
     
-    return this.db.query<Buyer>(`SELECT wld_joint_auction_buyers_info.buyer_info_status,
-                                            wld_joint_auction_buyers_info.bidno, wld_users.firstName, wld_users.lastName,
-                                            wld_joint_auction_buyers_info.buyer_id, wld_joint_auction_buyers_info.value_allowed
-                                            FROM wld_joint_auction_buyers_info
-                                            left join wld_users on wld_joint_auction_buyers_info.buyer_id = wld_users.id ${whereSql} ${orderBy} LIMIT 1000`, params);
+    // Get total count
+    const countSql = `SELECT COUNT(*) as count FROM wld_joint_auction_buyers_info
+                     left join wld_users on wld_joint_auction_buyers_info.buyer_id = wld_users.id ${whereSql}`;
+    const countResult = await this.db.query<{count: number}>(countSql, params);
+    const totalRecords = countResult[0]?.count || 0;
+    
+    // Get paginated data
+    let sql = `SELECT wld_joint_auction_buyers_info.buyer_info_status,
+                      wld_joint_auction_buyers_info.bidno, wld_users.firstName, wld_users.lastName,
+                      wld_joint_auction_buyers_info.buyer_id, wld_joint_auction_buyers_info.value_allowed
+               FROM wld_joint_auction_buyers_info
+               left join wld_users on wld_joint_auction_buyers_info.buyer_id = wld_users.id ${whereSql}
+               ORDER BY bidno ASC`;
+    
+    if (pagination) {
+      const offset = pagination.page * pagination.size;
+      sql += ` LIMIT ${pagination.size} OFFSET ${offset}`;
+    }
+    
+    const data = await this.db.query<Buyer>(sql, params);
+    
+    return {
+      data,
+      totalRecords,
+      page: pagination?.page || 0,
+      size: pagination?.size || data.length
+    };
   }
 }

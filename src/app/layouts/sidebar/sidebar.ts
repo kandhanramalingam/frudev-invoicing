@@ -24,12 +24,12 @@ export class Sidebar {
         {label: "Auctions", icon: "fa fa-gavel", route: "/auctions",},
         {label: "Lots", route: "/lots", icon: "fa fa-list"},
         {label: "Buyers", route: "/buyers", icon: "fa fa-users"},
-        {label: "Vehicle", route: "/vehicle", icon: "fa fa-truck"},
-        {label: "Species", route: "/species", icon: "fa fa-paw"},
-        {label: "Clients", route: "/clients", icon: "fa fa-user"},
-        {label: "Quote", route: "/quote", icon: "fa fa-file-text"},
+        // {label: "Vehicle", route: "/vehicle", icon: "fa fa-truck"},
+        // {label: "Species", route: "/species", icon: "fa fa-paw"},
+        // {label: "Clients", route: "/clients", icon: "fa fa-user"},
+        // {label: "Quote", route: "/quote", icon: "fa fa-file-text"},
         {label: "Invoice Config", route: "/invoice-config", icon: "fa fa-sliders"},
-        {label: "Quote Config", route: "/quote-config", icon: "fa fa-quote-left"},
+        // {label: "Quote Config", route: "/quote-config", icon: "fa fa-quote-left"},
     ];
 
     constructor(public router: Router) {

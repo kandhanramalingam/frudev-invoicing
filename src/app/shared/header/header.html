@@ -2,7 +2,7 @@
   <div class="flex items-center gap-2 min-w-0">
     <!-- Left slot: if consumer provides custom left content, render it; otherwise render title if provided -->
     <ng-content select="[left]"></ng-content>
-    <h2 *ngIf="title" class="text-xl font-semibold truncate">{{ title }}</h2>
+    <h2 *ngIf="pageTitle" class="text-xl font-semibold truncate">{{ pageTitle }}</h2>
   </div>
   <div class="flex items-center gap-2 ml-4">
     <!-- Right actions slot -->

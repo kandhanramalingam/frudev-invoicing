@@ -9,5 +9,5 @@ import { NgIf } from '@angular/common';
   styleUrl: './header.scss'
 })
 export class HeaderComponent {
-  @Input() title?: string;
+  @Input() pageTitle?: string;
 }
