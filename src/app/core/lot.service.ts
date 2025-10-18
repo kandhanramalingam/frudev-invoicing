@@ -177,9 +177,13 @@ export class LotService {
         try {
             return this.db.query<any>(`
                 SELECT l.id, l.mainlotno, l.description, l.sum_total,
-                       ua.auction_price, ua.total_auction_price
+                       ua.auction_price as auction_price, 
+                       ua.total_auction_price as total_auction_price,
+                       sl.male as male_total,
+                       sl.female as female_total
                 FROM wld_user_auctions ua
                 JOIN wld_lotset l ON ua.auction_id = l.auction_id AND ua.game_id = l.wla_lotno
+                LEFT JOIN wld_sublot sl ON l.id = sl.lot_id
                 WHERE ua.user_id = ? AND ua.auction_id = ?
                 ORDER BY l.mainlotno ASC
             `, [buyerId, auctionId]);
@@ -189,5 +193,17 @@ export class LotService {
         }
     }
 
-
+    async getInvoiceConfigs(): Promise<InvoiceConfigs> {
+        await this.init();
+        try {
+            const configs = await this.db.query<InvoiceConfig>('SELECT type, value FROM wld_invoice_config');
+            return configs.reduce((acc, config) => {
+                acc[config.type] = config.value;
+                return acc;
+            }, {} as any);
+        } catch (error) {
+            console.error('Error getting invoice configs:', error);
+            throw error;
+        }
+    }
 }

@@ -5,4 +5,5 @@ export interface Buyer {
     lastName: string
     buyer_id: string
     value_allowed: number
+    allLotsInvoiced?: boolean
 }

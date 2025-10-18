@@ -34,7 +34,12 @@
                   text-white p-1 text-center w-4 h-4" pTooltip="User Not registered on Wildlife."></i>
                     </div>
                 } @else {
-                    {{ row.firstName }} {{ row.lastName }}
+                    <div class="flex items-center gap-2">
+                        <span>{{ row.firstName }} {{ row.lastName }}</span>
+                        @if (row.allLotsInvoiced) {
+                            <i class="fa fa-check-double text-green-600" pTooltip="All lots invoiced"></i>
+                        }
+                    </div>
                 }
             </td>
             <td>{{ row.bidno }}</td>

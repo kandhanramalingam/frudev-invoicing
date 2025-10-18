@@ -13,6 +13,7 @@ import {Tooltip} from "primeng/tooltip";
 import {CurrencyPipe} from "@angular/common";
 import {ToastService} from "../../core/toast.service";
 import { Button } from 'primeng/button';
+import { InvoiceService } from '../../core/invoice.service';
 
 @Component({
   selector: 'app-auction-buyers',
@@ -31,7 +32,7 @@ export class AuctionBuyers implements OnInit {
   rowsPerPage = 10;
   currentPage = 0;
 
-  constructor(private auctionSvc: AuctionService, private buyerSvc: BuyerService, private route: ActivatedRoute, private router: Router, private toastService: ToastService) {}
+  constructor(private auctionSvc: AuctionService, private buyerSvc: BuyerService, private route: ActivatedRoute, private router: Router, private toastService: ToastService, private invoiceService: InvoiceService) {}
 
   async ngOnInit() {
     this.auctions = await this.auctionSvc.searchAuctions();
@@ -60,6 +61,13 @@ export class AuctionBuyers implements OnInit {
         page: this.currentPage,
         size: this.rowsPerPage
       });
+      
+      // Check invoice status for each buyer
+      for (const buyer of result.data) {
+          console.log({bid: buyer.buyer_id})
+        buyer.allLotsInvoiced = await this.invoiceService.areAllLotsInvoiced(this.selectedAuctionId, buyer.buyer_id);
+      }
+      
       this.rows = result.data;
       this.totalRecords = result.totalRecords;
     } catch (err) {

@@ -153,4 +153,118 @@ export class SampleInvoice implements OnChanges {
     getTotalPayments(): number {
         return this.payments.reduce((total, payment) => total + (payment.amount || 0), 0);
     }
+    
+    async generatePDFContent(): Promise<Uint8Array> {
+        // Import jsPDF and html2canvas dynamically
+        const { jsPDF } = await import('jspdf');
+        const html2canvas = (await import('html2canvas')).default;
+        
+        const invoiceElement = document.getElementById('invoiceContent');
+        if (invoiceElement) {
+            try {
+                // Capture the element as canvas
+                const canvas = await html2canvas(invoiceElement, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true
+                });
+                
+                // Create PDF
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgData = canvas.toDataURL('image/png');
+                
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 295; // A4 height in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                
+                let position = 0;
+                
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                
+                // Return PDF as Uint8Array
+                const pdfOutput = pdf.output('arraybuffer');
+                return new Uint8Array(pdfOutput);
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+            }
+        }
+        
+        // Fallback to HTML content
+        const content = this.generateInvoiceHTML();
+        return new TextEncoder().encode(content);
+    }
+    
+    generateInvoiceHTML(): string {
+        return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Invoice</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                .header { text-align: center; margin-bottom: 20px; }
+                .total { font-weight: bold; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>INVOICE</h1>
+                <p>Contact: ${this.config?.awa_contact || 'N/A'}</p>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lot</th>
+                        <th>Item</th>
+                        <th>M</th>
+                        <th>F</th>
+                        <th>T</th>
+                        <th>Amount</th>
+                        <th>VAT</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${this.lotList.map(lot => `
+                        <tr>
+                            <td>${lot.Lot}</td>
+                            <td>${lot.Item}</td>
+                            <td>${lot.M}</td>
+                            <td>${lot.F}</td>
+                            <td>${lot.T}</td>
+                            <td>R${lot.Amount.toFixed(2)}</td>
+                            <td>R${lot.Vat.toFixed(2)}</td>
+                            <td>R${lot.Total.toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+                <tfoot>
+                    <tr class="total">
+                        <td colspan="2">TOTAL</td>
+                        <td>${this.totalOfLot.m}</td>
+                        <td>${this.totalOfLot.f}</td>
+                        <td>${this.totalOfLot.t}</td>
+                        <td>R${this.totalOfLot.amount.toFixed(2)}</td>
+                        <td>R${this.totalOfLot.vat.toFixed(2)}</td>
+                        <td>R${(this.totalOfLot.amount + this.totalOfLot.vat).toFixed(2)}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </body>
+        </html>
+        `;
+    }
 }
